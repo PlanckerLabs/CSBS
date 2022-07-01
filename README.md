@@ -8,5 +8,4 @@ https://www.notion.so/greenpillcn/Community-SBT-Basket-and-Seal-2651bd5d756e43ee
 本产品会捐赠社区版给Greenpill社区使用，也欢迎任何社区、DAO使用社区版。
 
 本产品会采用Seed Group积分方式招募产品、研发、设计、运营和任何需要的小伙伴！
-参考这里：https://www.notion.so/plancker/Seed-Group-b01d31853f6240849e14d52843bd0533
 
