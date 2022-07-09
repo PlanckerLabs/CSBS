@@ -10,3 +10,11 @@ https://www.notion.so/greenpillcn/Community-SBT-Basket-and-Seal-2651bd5d756e43ee
 
 + 本产品会采用Seed Group积分方式招募产品、研发、设计、运营和任何需要的小伙伴！
 
+
+## History
+
++ 7-4 finish the idea on notion （above）
++ 7-7 talked in greenpill_cn weekly meeting twice
++ 7-8 first wechate group build
+
+
