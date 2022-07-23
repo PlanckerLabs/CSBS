@@ -34,6 +34,7 @@ traits可以查看；
 1.讨论技术方案：hhh，cejay，jhf，海绵，挺肥，其他有兴趣朋友？
 
 2.拆分工作量，分工，fork原理SBT，开始开发
+fork url: [SBT](https://github.com/PlanckerLabs/Dalifunia-SBT)
 
 3.两天一次进度review
 
