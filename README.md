@@ -16,5 +16,8 @@ https://www.notion.so/greenpillcn/Community-SBT-Basket-and-Seal-2651bd5d756e43ee
 + 7-4 finish the idea on notion （above）
 + 7-7 talked in greenpill_cn weekly meeting twice
 + 7-8 first wechate group build
++ 7-20 Dali meeting
++ 7-21 NFT and SBT group
++ 7-23 finish Dalifunia solution
 
 
