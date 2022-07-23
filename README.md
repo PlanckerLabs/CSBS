@@ -1,4 +1,4 @@
-# CSSB
+# CSBS
 ## Community  SBT Basket and Seal
 + 源于DAOAtalas的一次社区交接：https://www.notion.so/greenpillcn/DAO-Atlas-2b96ffb990b84fab854ad846235beacd
 + 需要铸造NFT，但我们不想铸造普通的图片NFT，而是关联社区的，个人拥有的，对一段有意义活动的记录，并且不可转移.
