@@ -1,4 +1,5 @@
 #### 大理Web3大会SBT使用流程初稿方案
+0.Based on this doc [](design.md)
 
 1.收集所有干活的Builder的钱包地址和昵称/ID，设定截止日期，不再接受新地址（8-10？，给10天制作时间）。
 
@@ -33,6 +34,7 @@ traits可以查看；
 1.讨论技术方案：hhh，cejay，jhf，海绵，挺肥，其他有兴趣朋友？
 
 2.拆分工作量，分工，fork原理SBT，开始开发
+fork url: [SBT](https://github.com/PlanckerLabs/Dalifunia-SBT)
 
 3.两天一次进度review
 
