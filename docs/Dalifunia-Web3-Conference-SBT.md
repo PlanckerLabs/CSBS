@@ -1,6 +1,7 @@
 #### 大理Web3大会SBT使用流程初稿方案
 0.Based on this doc [design doc](design.md)
-zik提产品建议
+zik提产品建议+验收
+Pablo验收
 
 1.收集所有干活的Builder的钱包地址和昵称/ID，设定截止日期，不再接受新地址（8-10？，给10天制作时间）。
 Pablo，100人-200 NFT，提供excel
