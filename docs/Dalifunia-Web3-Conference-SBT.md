@@ -50,7 +50,7 @@ fork url: [SBT](https://github.com/PlanckerLabs/Dalifunia-SBT)
 
 4.jhf做PM，娃哈哈，提供基础代码（原来的SBT代码）
 
-5.hhh加入页面开发，域名Pablo负责
+5.hhh加入页面开发，域名Pablo负责，林可在主页面加SBTs的图片和链接，网址我提供
 
 6.启动
 
