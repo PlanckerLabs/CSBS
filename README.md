@@ -19,5 +19,6 @@ https://www.notion.so/greenpillcn/Community-SBT-Basket-and-Seal-2651bd5d756e43ee
 + 7-20 Dali meeting
 + 7-21 NFT and SBT group
 + 7-23 finish Dalifunia solution
++ 7-26 last meeting：start
 
 
