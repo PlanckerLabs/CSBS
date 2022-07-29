@@ -32,9 +32,11 @@ traits可以查看；
 #### SBT开发计划
 
 1.讨论技术方案：hhh，cejay，jhf，海绵，挺肥，其他有兴趣朋友？
+![flow](CSBS-basic.drawio.png)
 
 2.拆分工作量，分工，fork原理SBT，开始开发
 fork url: [SBT](https://github.com/PlanckerLabs/Dalifunia-SBT)
+
 
 3.两天一次进度review
 
