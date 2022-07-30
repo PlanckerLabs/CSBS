@@ -1,11 +1,11 @@
-<mxfile host="app.diagrams.net" modified="2022-07-30T04:28:55.904Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36" etag="2FjuG9m1oPqEg4MBpSLK" version="20.2.0" type="github">
+<mxfile host="app.diagrams.net" modified="2022-07-30T04:29:26.072Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36" etag="i3HBClHsLzc89edZImrV" version="20.2.0" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="1055" dy="1689" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="AzbD6XMumv_pFaZ5dlBS-0" value="Community Register" style="swimlane;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="100" y="-1080" width="650" height="930" as="geometry" />
+          <mxGeometry x="100" y="-1080" width="650" height="870" as="geometry" />
         </mxCell>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-3" value="EOA Wallet/Contract Wallet" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="AzbD6XMumv_pFaZ5dlBS-0" vertex="1">
           <mxGeometry x="85" y="226" width="120" height="40" as="geometry" />
