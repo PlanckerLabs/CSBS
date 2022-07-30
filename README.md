@@ -21,5 +21,7 @@ https://www.notion.so/greenpillcn/Community-SBT-Basket-and-Seal-2651bd5d756e43ee
 + 7-21 NFT and SBT group
 + 7-23 finish Dalifunia solution
 + 7-26 last meeting：start
++ 7-27 28，30，flowchart
++ 7-30 logic finish，add usercase， build basic template
 
 
