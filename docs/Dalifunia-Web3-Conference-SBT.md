@@ -87,6 +87,8 @@ claim流程：address查询kv，获得id，申请mint
 2.拆分工作量，分工，fork原理SBT，开始开发
 fork url: [SBT](https://github.com/PlanckerLabs/Dalifunia-SBT)
 2.1 合约
+合约有社区合约，管理新增社区和社区成员，event合约，管理创建的event和sbt以及接收人
+目前两种分发机制，需要在event sbt合约中统一：空投，创建人已有名单，直接mint drop（盲盒中心化发？）；自行claim，只创建元数据，自己mint马上开盒？
 1>override 165，不可转移NFT（SBT）
 2>图片非原来proofofsoul的上传方式，改为盲盒方式，id先给，用默认图片，开盒图片依靠后面中心化运行脚本赋值？
 3>CSBS SBT合约存储Event（Publisher，一个社区hash，必须创建或者拥有），Receiver，未来再赋予更多SBT的属性
