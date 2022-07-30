@@ -84,6 +84,14 @@ airdrop，使用登录的地址支付gas，直接遍历receiver，mint发放SBTs
 claim，proofofsoul之前方式，需要客户登录指定url，不需要有seal或者任何其他凭证，直接claim
 claim流程：address查询kv，获得id，申请mint
 
+1.6可选部分
+任何人可以创建自己的Seal，加一句自己的格言
+Seal体系本质上是一个合约钱包+一个不可转移的SBT（Seal），无论对于社区的还是个人的Seal，都可以社交恢复
+Seal对外会进行签名盖章，表示支持和同意；对于重要的签名，会附加积分
+积分存储于Seal所在的合约钱包
+一个社区有多少人支持，可以看被盖章的数量和添加积分的数量
+积分需要通过对社区做贡献获取，可以和其他激励机制并行
+
 2.拆分工作量，分工，fork原理SBT，开始开发
 fork url: [SBT](https://github.com/PlanckerLabs/Dalifunia-SBT)
 
