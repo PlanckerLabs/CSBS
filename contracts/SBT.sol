@@ -1209,59 +1209,8 @@ abstract contract Ownable is Context {
     }
 }
 
-// OpenZeppelin Contracts v4.4.1 (utils/Counters.sol)
-/**
- * @title Counters
- * @author Matt Condon (@shrugs)
- * @dev Provides counters that can only be incremented, decremented or reset. This can be used e.g. to track the number
- * of elements in a mapping, issuing ERC721 ids, or counting request ids.
- *
- * Include with `using Counters for Counters.Counter;`
- */
-library Counters {
-    struct Counter {
-        // This variable should never be directly accessed by users of the library: interactions must be restricted to
-        // the library's function. As of Solidity v0.5.2, this cannot be enforced, though there is a proposal to add
-        // this feature: see https://github.com/ethereum/solidity/issues/4637
-        uint256 _value; // default: 0
-    }
-
-    function current(Counter storage counter) internal view returns (uint256) {
-        return counter._value;
-    }
-
-    function increment(Counter storage counter) internal {
-        unchecked {
-            counter._value += 1;
-        }
-    }
-
-    function decrement(Counter storage counter) internal {
-        uint256 value = counter._value;
-        require(value > 0, "Counter: decrement overflow");
-        unchecked {
-            counter._value = value - 1;
-        }
-    }
-
-    function reset(Counter storage counter) internal {
-        counter._value = 0;
-    }
-}
-
 contract SBT is ERC721, Ownable {
-    using Counters for Counters.Counter;
-
-    Counters.Counter private _tokenIdCounter;
-
     constructor() ERC721("NAME", "SYM") {}
-
-    function safeMint(address to) private returns (uint256) {
-        uint256 tokenId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
-        _safeMint(to, tokenId);
-        return tokenId;
-    }
 
     function eventAdd(
         address communityOwner,
@@ -1284,18 +1233,20 @@ contract SBT is ERC721, Ownable {
 
     function awards(
         address to,
+        uint256 tokenId,
         uint256 eventId,
         string calldata tokenUri
     ) public {
-        safeMint(to);
+        _safeMint(to, tokenId);
     }
 
-    function cliam(
+    function awards(
         uint256 eventId,
+        uint256 tokenId,
         string calldata tokenUri,
         bytes32 signature
     ) public {
-        safeMint(msg.sender);
+        _safeMint(msg.sender, tokenId);
     }
 
     function changeAddress(
