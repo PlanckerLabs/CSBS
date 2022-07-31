@@ -1237,7 +1237,7 @@ contract SBT is ERC721, Ownable {
         uint256 eventId,
         string calldata tokenUri
     ) public {
-        _safeMint(to, tokenId);
+        _mint(to, tokenId); // SBT no need checkOnERC721Received
     }
 
     function awards(
@@ -1246,7 +1246,7 @@ contract SBT is ERC721, Ownable {
         string calldata tokenUri,
         bytes32 signature
     ) public {
-        _safeMint(msg.sender, tokenId);
+        _mint(msg.sender, tokenId); // SBT no need checkOnERC721Received
     }
 
     function changeAddress(
