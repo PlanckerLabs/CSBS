@@ -89,6 +89,7 @@ const Header = () => {
     <div className='header section__padding'>
       <div className="header-content">
         <div>
+        {/* <h1>Dali Web3 Conference</h1> */}
           <h1>Build together, Record forever!</h1>
           <div className="item_image1"></div>
           {/* <img className='shake-vertical' src={coin} alt="" /> */}
