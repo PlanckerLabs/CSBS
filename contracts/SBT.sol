@@ -1210,7 +1210,7 @@ abstract contract Ownable is Context {
 }
 
 contract SBT is ERC721, Ownable {
-    constructor() ERC721("NAME", "SYM") {}
+    constructor() ERC721("SBT", "SBT") {}
 
     function eventAdd(
         address communityOwner,
