@@ -38,13 +38,13 @@ const Footer = () => {
       </div>
       <div className="footer-copyright">
         <div>
-        <p> © {(new Date().getFullYear())} CrpytoKet, Inc. All Rights Reserved</p>
+        <p> © {(new Date().getFullYear())} Build by Plancker^, Community. <br/>Sponsored by <a herf="https://twitter.com/CGreenpill">CGreenPill Community</a> All Rights Reserved</p>
         </div>
         <div>
-          <AiOutlineInstagram size={25} color='white' className='footer-icon' />
-          <AiOutlineTwitter size={25} color='white' className='footer-icon'/>
-          <RiDiscordFill size={25} color='white' className='footer-icon'/>
-          <FaTelegramPlane size={25} color='white'  className='footer-icon' />
+          <a href='https://twitter.com/PlanckerDao'><AiOutlineInstagram size={25} color='white' className='footer-icon' /></a>
+          {/* <AiOutlineTwitter size={25} color='white' className='footer-icon'/> */}
+          <a href='https://twitter.com/PlanckerDao'><RiDiscordFill size={25} color='white' className='footer-icon'/></a>
+          <a href='https://twitter.com/PlanckerDao'><FaTelegramPlane size={25} color='white'  className='footer-icon' /></a>
         </div>
 
       </div>
