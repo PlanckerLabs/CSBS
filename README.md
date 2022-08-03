@@ -23,5 +23,6 @@ https://www.notion.so/greenpillcn/Community-SBT-Basket-and-Seal-2651bd5d756e43ee
 + 7-26 last meeting：start
 + 7-27 28，30，flowchart
 + 7-30 logic finish，add usercase， build basic template
++ 8-02 we got a frontend template,awsome!
 
-
++ 8-03 fixed some frontend, discuss the contract, coding now!
