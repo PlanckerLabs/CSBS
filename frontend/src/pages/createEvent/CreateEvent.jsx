@@ -1,11 +1,11 @@
 import './create.css'
 import Image from '../../assets/Image.png'
-const Create = () => {
+const CreateEvent = () => {
 
   return (
     <div className='create section__padding'>
       <div className="create-container">
-        <h1>Create community</h1>
+        <h1>Create event</h1>
         <p className='upload-file'>Upload File</p>
         <div className="upload-img-show">
             <h3>JPG, PNG, GIF, SVG, WEBM, MP3, MP4. Max 100mb.</h3>
@@ -63,4 +63,4 @@ const Create = () => {
   )
 };
 
-export default Create;
+export default CreateEvent;
