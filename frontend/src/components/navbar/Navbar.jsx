@@ -8,7 +8,7 @@ import { useAddress, useMetamask, useDisconnect } from "@thirdweb-dev/react";
 const Menu = () => (
   <>
      <Link to="/create"><p>create community </p> </Link>
-     <Link to="/create"><p>create event </p> </Link>
+     <Link to="/createEvent"><p>create event </p> </Link>
      <Link to="/profile/Rian"><p>My SBT</p></Link>
     
   </>
