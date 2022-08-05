@@ -1210,50 +1210,160 @@ abstract contract Ownable is Context {
 }
 
 contract SBT is ERC721, Ownable {
-    constructor() ERC721("SBT", "SBT") {}
+    uint eventId;
+    struct sbtData {
+        address communityOwner;
+        address communitySigner;
+        string eventUri;
+        string baseTokenUri; //每个event是一批NFT，每个NFT都有一个ipfs，为了省钱，ipfs链接是个json文件，是
+    }
+    // struct issuerData {
+    //     address to;
+    //     uint256 tokenId;
+    //     uint256 eventId;
+    //     string tokenUri;
+    // }
 
-    function eventAdd(
-        address communityOwner,
+    sbtData sbtdata;
+
+    mapping(uint256 => sbtData) public eventData;
+    mapping(uint256 => uint256) public tokenData;
+    // 把evenid与owneraddress 链接起来
+    // mapping(address => issuerData) public addrIssuer;
+    constructor() ERC721("DaliWeb3SummerFestSBT", "DWSFSBT") {
+
+    }
+
+    function addEvent(
         address communitySigner,
         string calldata eventUri,
         string calldata baseTokenUri
-    ) public returns (uint256) {
-        uint256 eventId = 0;
+    ) public view returns (uint256) {
+        eventId++;
+        eventData[eventId] = sbtdata(msg.sender, communitySigner, eventUri, baseTokenUri);
         return eventId;
     }
+    //可以根据eventid查到信息
+    // 添加事件，每次调用，event与eventId形成一个映射关系，eventId + 1
 
-    function eventUpdate(string calldata eventUri, string calldata baseTokenUri)
-        public
-    {}
+    function eventUpdate(
+        string calldata eventUri, 
+        string calldata baseTokenUri,
+        address communitySigner,
+        uint eventId
+        ) public {
+            require(msg.sender == eventData[eventId].communityOwner);
+            eventData[eventId] = sbtdata(msg.sender,communitySigner,eventUri,baseTokenUri);
+    }
 
     function eventControllerUpdate(
         address newCommunityOwner,
-        address newCommunitySigner
-    ) public {}
+        address newCommunitySigner,
+        string calldata eventUri, 
+        string calldata baseTokenUri,
+        uint eventId
+    ) public {
+        require(msg.sender == eventData[eventId].communityOwner);
+        eventData[eventId] = sbtdata(newCommunityOwner,newCommunitySigner,eventUri,baseTokenUri);
+        // 修改消耗gas很少
+        // 通过tokenid查到tokenuri
+    }
 
-    function awards(
+    function issuerAwards(
         address to,
         uint256 tokenId,
         uint256 eventId,
         string calldata tokenUri
     ) public {
+        tokenData[tokenId] = eventId;
+        User storage user = userData[to]; // get user data
+        uint256 claimed_ = user.tokensClaimed; // user.tokensClaimed is uint32
+        claimed_ += n; 
+        
+        require(
+            claimed_ <= _amountPurchased(user.contribution, price_), 
+            "Trying to send more than they purchased."
+        );
+        user.tokensClaimed = uint32(claimed_);
+        _internalMint(to, n);
+        // addrIssuer[msg.sender] = issuedata(to,)
         _safeMint(to, tokenId);
     }
+    function _sendTokens(address to, uint256 tokenId) internal {
+        uint256 price_ = price; // storage to memory
+        require(price_ != 0, "Price has not been set");
 
-    function awards(
+        User storage user = userData[to]; // get user data
+        uint256 claimed_ = user.tokensClaimed; // user.tokensClaimed is uint32
+        claimed_ += n; 
+        
+        require(
+            claimed_ <= _amountPurchased(user.contribution, price_), 
+            "Trying to send more than they purchased."
+        );
+        user.tokensClaimed = uint32(claimed_);
+        _internalMint(to, n);
+    }
+
+    function _internalMint(address to, uint256 numberOfTokens) internal {
+        uint256 ts = _totalMinted(); // ignore burn counter here
+        require(ts + numberOfTokens <= MAX_SUPPLY, 'Number would exceed max supply');
+        _safeMint(to, numberOfTokens);
+    }
+
+
+
+    function sendTokensBatch(address[] calldata addresses) external onlyRole(REFUND_ROLE) {
+        for (uint256 i; i < addresses.length; i++) {
+            _sendTokens(addresses[i], amountPurchased(addresses[i]));
+        }
+    }
+        /**
+    * @notice send refunds and tokens to an address.
+    * @dev can only be called after the clearing price has been set.
+    * @param to the address to refund.
+    */
+    
+    function userAwards(
         uint256 eventId,
         uint256 tokenId,
         string calldata tokenUri,
         bytes32 signature
     ) public {
+        
         _safeMint(msg.sender, tokenId);
     }
 
     function changeAddress(
         uint256 tokenId,
+        uint eventId,
         address newAddress,
-        bytes32 signature
-    ) public {}
+        bytes calldata signature
+    ) public {
+        string calldata tokenuri = tokenURI(tokenId);
+        if (signatureVerification(eventId, tokenId, tokenuri, signature) == eventData[eventId].communitySigner){
+            _safeMint(newAddress, tokenId);
+        }
+    }
+    // eventId这次写死
+
+
+    // @dev 从_msgHash和签名_signature中恢复signer地址
+    function signatureVerification(uint256 eventId, uint256 tokenId, string calldata tokenUri, bytes calldata signature) public pure returns (address){
+       bytes32 hashValue = keccak256(
+	            abi.encodePacked(
+	                eventId,
+	                tokenId,
+	                tokenUri
+	            )
+	        );
+
+ 	bytes32 hashMsg = hashValue.toEthSignedMessageHash();
+    require(
+        eventData[eventId].communitySigner == hashMsg.recover(signature),
+        "wallet: wrong signature"
+        );
+    }
 
     function tokenURI(uint256 tokenId)
         public
@@ -1263,8 +1373,12 @@ contract SBT is ERC721, Ownable {
         returns (string memory)
     {
         _requireMinted(tokenId);
-
-        return "";
+        uint256 evenId = tokenData[tokenId];
+        string calldata baseTokenUri = eventData[eventId].baseTokenUri;
+        return
+            bytes(baseTokenUri).length > 0
+                ? string(abi.encodePacked(baseTokenUri, tokenId.toString()))
+                : "";
     }
 
     modifier SoulBoundTokenTransferModifier() {
