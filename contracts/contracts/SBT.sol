@@ -50,10 +50,10 @@ contract CommunitySBT is ERC721URIStorage {
     mapping(uint256 => SoulBoundData) private  soulBoundDataRecordMap;
 
     // soul => SoulBoundData index
-    mapping(address => uint256) private soulBoundSoulMap;
+    mapping(address => uint256[]) private soulBoundSoulMap;
 
     // recorder => SoulBoundData index
-    mapping(address => uint256) private soulBoundRecorderMap;
+    mapping(address => uint256[]) private soulBoundRecorderMap;
 
     /**
      * soul bount data recorded
@@ -88,13 +88,13 @@ contract CommunitySBT is ERC721URIStorage {
     }
 
     // get soulBoundSoulMap
-    function getSoulBoundSoulMap(address soul) public view returns (SoulBoundData memory) {
-        return soulBoundDataRecordMap[soulBoundSoulMap[soul]];
+    function getSoulBoundSoulMap(address soul) public view returns (uint256[] memory) {
+        return soulBoundSoulMap[soul];
     }
 
     // get soulBoundRecorderMap
-    function getSoulBoundRecorderMap(address recorder) public view returns (SoulBoundData memory) {
-        return soulBoundDataRecordMap[soulBoundRecorderMap[recorder]];
+    function getSoulBoundRecorderMap(address recorder) public view returns (uint256[] memory) {
+        return soulBoundRecorderMap[recorder];
     }
 
     // get communityEventMap
@@ -122,8 +122,8 @@ contract CommunitySBT is ERC721URIStorage {
             key,
             value
         );
-        soulBoundSoulMap[soul] = _soulBoundIndex;
-        soulBoundRecorderMap[msg.sender] = _soulBoundIndex;
+        soulBoundSoulMap[soul].push(_soulBoundIndex);
+        soulBoundRecorderMap[msg.sender].push(_soulBoundIndex);
 
         emit SoulBoundRecorded(soul,msg.sender,key,value);
 
