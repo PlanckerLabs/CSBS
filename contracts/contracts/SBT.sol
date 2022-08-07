@@ -61,7 +61,7 @@ contract CommunitySBT is ERC721URIStorage {
     event SoulBoundRecorded(
         address indexed soul,
         address indexed recorder,
-        bytes32 indexed key,
+        bytes4 indexed key,
         uint256 value
     );
 
@@ -110,11 +110,11 @@ contract CommunitySBT is ERC721URIStorage {
     /**
      * record soul bound data
      */
-    function soulBountDataRecord(address soul,bytes32 key,uint256 value) public {
+    function soulBountDataRecord(address soul,bytes4 key,uint256 value) public {
         _soulBountDataRecord(msg.sender,soul,key,value);
     }
 
-    function _soulBountDataRecord(address recorder,address soul,bytes32 key,uint256 value) private {
+    function _soulBountDataRecord(address recorder,address soul,bytes4 key,uint256 value) private {
 
         soulBoundDataRecordMap[_soulBoundIndex] = SoulBoundData(
             soul,
@@ -162,7 +162,7 @@ contract CommunitySBT is ERC721URIStorage {
         
         _soulBountDataRecord(address(this),
                             msg.sender,
-                            keccak256("addEvent"),
+                            bytes4(keccak256("addEvent")),
                             _eventId);
 
         return _eventId;
@@ -217,7 +217,7 @@ contract CommunitySBT is ERC721URIStorage {
 
         _soulBountDataRecord(communityEventMap[eventId].communityOwner,
                             to,
-                            keccak256("Award"),
+                            bytes4(keccak256("Award")),
                             eventId);
 
     }
