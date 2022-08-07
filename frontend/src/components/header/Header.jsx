@@ -106,9 +106,9 @@ const Header = () => {
        <Slider {...settings} className='slider'>
             <div className='slider-card'>
               <p className='slider-card-number'>1</p>
-              <div className="slider-img">
+              <div className="flex justify-center">
                 <img width='50%' height='50%' src={bids1} alt="" />
-                <img src={verify} className='verify' alt="" />
+                {/* <img src={verify} className='verify' alt="" /> */}
               </div>
               <Link to={`/eventProfile/Rian`}>
               <p className='slider-card-name'>ETH DevCon London</p>
