@@ -5,57 +5,36 @@ const Create = () => {
   return (
     <div className='create section__padding'>
       <div className="create-container">
-        <h1>Create community</h1>
-        <p className='upload-file'>Upload File</p>
-        <div className="upload-img-show">
+        {/* <h1>Create my community</h1> */}
+        {/* <div className="upload-img-show">
             <h3>JPG, PNG, GIF, SVG, WEBM, MP3, MP4. Max 100mb.</h3>
             <img src={Image} alt="banner" />
             <p>Drag and Drop File</p>
-        </div>
+        </div> */}
         <form className='writeForm' autoComplete='off'>
           
           <div className="formGroup">
-            <label>Upload</label>
+            <label>Upload a Community logo with 100*100</label>
             <input type="file" className='custom-file-input'
           />
           </div>
           <div className="formGroup">
-            <label>Name</label>
-            <input type="text" placeholder='Item Name' autoFocus={true} />
+            <label>Set your Community Name limit to 50 words</label>
+            <input type="text" placeholder='Community Name' autoFocus={true} />
           </div>
-          <div className="formGroup">
-            <label>Description</label>
+          {/* <div className="formGroup">
+            <label>Give a Description or just a Motto to introduce</label>
             <textarea type="text" rows={4}
-          placeholder='Decription of your item' 
+          placeholder='Decription of your community' 
           ></textarea>
-          </div>
+          </div> */}
           <div className="formGroup">
-            <label>Price</label>
+            <label>Give a URL of your Community</label>
             <div className="twoForm">
-              <input type="text" placeholder='Price'  />
-              <select>
-                <option value="ETH">ETH</option>
-                <option value="BTC">BTC</option>
-                <option value="LTC">LTC</option>
-              </select>
+              <input type="text" placeholder='Community introduction URL'  />
             </div>
           </div>
-          <div className="formGroup">
-            <label>Category</label>
-            <select >
-               <option>Art</option>
-               <option>Photography</option>
-               <option>Sports</option>
-               <option>Collectibles</option>
-               <option>Trading Cards</option>
-               <option>Utility</option>
-            </select>
-          </div>
-          <div className="formGroup">
-            <label>Available Items</label>
-            <input type="text" placeholder='No of Items'/>
-          </div>
-          <button className='writeButton'>Create Item</button>
+          <button className='writeButton'>Create my Community in Registry</button>
         </form>
       </div>
     </div>
