@@ -105,10 +105,8 @@ const Header = () => {
         <h1> Event  list</h1>
        <Slider {...settings} className='slider'>
             <div className='slider-card'>
-              <p className='slider-card-number'>1</p>
-              <div className="slider-img">
+              <div className="flex justify-center">
                 <img width='50%' height='50%' src={bids1} alt="" />
-                <img src={verify} className='verify' alt="" />
               </div>
               <Link to={`/eventProfile/Rian`}>
               <p className='slider-card-name'>ETH DevCon London</p>
@@ -116,10 +114,8 @@ const Header = () => {
               <p className='slider-card-price'>2022-9-10 <span>London</span></p>
             </div>
             <div className='slider-card'>
-              <p className='slider-card-number'>2</p>
-              <div className="slider-img">
-                <img src={bids2} alt="" />
-                <img src={verify} className='verify' alt="" />
+              <div className="flex justify-center">
+                <img width='50%' height='50%' src={bids2} alt="" />
               </div>
               <Link to={`/eventProfile/Rian`}>
               <p className='slider-card-name'>ETH DevCon London</p>
@@ -127,10 +123,8 @@ const Header = () => {
               <p className='slider-card-price'>2022-9-10 <span>London</span></p>
             </div>
             <div className='slider-card'>
-              <p className='slider-card-number'>3</p>
-              <div className="slider-img">
-                <img src={bids3} alt="" />
-                <img src={verify} className='verify' alt="" />
+              <div className="flex justify-center">
+                <img width='50%' height='50%' src={bids3} alt="" />
               </div>
               <Link to={`/eventProfile/Rian`}>
               <p className='slider-card-name'>ETH DevCon London</p>
@@ -138,10 +132,8 @@ const Header = () => {
               <p className='slider-card-price'>2022-9-10 <span>London</span></p>
             </div>
             <div className='slider-card'>
-              <p className='slider-card-number'>4</p>
-              <div className="slider-img">
-                <img src={bids4} alt="" />
-                <img src={verify} className='verify' alt="" />
+              <div className="flex justify-center">
+                <img width='50%' height='50%' src={bids4} alt="" />
               </div>
               <Link to={`/eventProfile/Rian`}>
               <p className='slider-card-name'>ETH DevCon London</p>
@@ -149,10 +141,8 @@ const Header = () => {
               <p className='slider-card-price'>2022-9-10 <span>London</span></p>
             </div>
             <div className='slider-card'>
-              <p className='slider-card-number'>5</p>
-              <div className="slider-img">
-                <img src={bids5} alt="" />
-                <img src={verify} className='verify' alt="" />
+              <div className="flex justify-center">
+                <img width='50%' height='50%' src={bids5} alt="" />
               </div>
               <Link to={`/eventProfile/Rian`}>
               <p className='slider-card-name'>ETH DevCon London</p>
@@ -160,10 +150,8 @@ const Header = () => {
               <p className='slider-card-price'>2022-9-10 <span>London</span></p>
             </div>
             <div className='slider-card'>
-              <p className='slider-card-number'>6</p>
-              <div className="slider-img">
-                <img src={bids6} alt="" />
-                <img src={verify} className='verify' alt="" />
+              <div className="flex justify-center">
+                <img width='50%' height='50%' src={bids6} alt="" />
               </div>
               <Link to={`/eventProfile/Rian`}>
               <p className='slider-card-name'>ETH DevCon London</p>

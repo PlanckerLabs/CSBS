@@ -3,12 +3,11 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract CommunitySBT is ERC721URIStorage, Ownable {
+contract CommunitySBT is ERC721URIStorage {
     using Strings for uint256;
     using ECDSA for bytes32;
     using Counters for Counters.Counter;
@@ -51,10 +50,10 @@ contract CommunitySBT is ERC721URIStorage, Ownable {
     mapping(uint256 => SoulBoundData) private  soulBoundDataRecordMap;
 
     // soul => SoulBoundData index
-    mapping(address => uint256) private soulBoundSoulMap;
+    mapping(address => uint256[]) private soulBoundSoulMap;
 
     // recorder => SoulBoundData index
-    mapping(address => uint256) private soulBoundRecorderMap;
+    mapping(address => uint256[]) private soulBoundRecorderMap;
 
     /**
      * soul bount data recorded
@@ -62,7 +61,7 @@ contract CommunitySBT is ERC721URIStorage, Ownable {
     event SoulBoundRecorded(
         address indexed soul,
         address indexed recorder,
-        bytes32 indexed key,
+        bytes4 indexed key,
         uint256 value
     );
 
@@ -89,13 +88,13 @@ contract CommunitySBT is ERC721URIStorage, Ownable {
     }
 
     // get soulBoundSoulMap
-    function getSoulBoundSoulMap(address soul) public view returns (SoulBoundData memory) {
-        return soulBoundDataRecordMap[soulBoundSoulMap[soul]];
+    function getSoulBoundSoulMap(address soul) public view returns (uint256[] memory) {
+        return soulBoundSoulMap[soul];
     }
 
     // get soulBoundRecorderMap
-    function getSoulBoundRecorderMap(address recorder) public view returns (SoulBoundData memory) {
-        return soulBoundDataRecordMap[soulBoundRecorderMap[recorder]];
+    function getSoulBoundRecorderMap(address recorder) public view returns (uint256[] memory) {
+        return soulBoundRecorderMap[recorder];
     }
 
     // get communityEventMap
@@ -111,11 +110,11 @@ contract CommunitySBT is ERC721URIStorage, Ownable {
     /**
      * record soul bound data
      */
-    function soulBountDataRecord(address soul,bytes32 key,uint256 value) public {
+    function soulBountDataRecord(address soul,bytes4 key,uint256 value) public {
         _soulBountDataRecord(msg.sender,soul,key,value);
     }
 
-    function _soulBountDataRecord(address recorder,address soul,bytes32 key,uint256 value) private {
+    function _soulBountDataRecord(address recorder,address soul,bytes4 key,uint256 value) private {
 
         soulBoundDataRecordMap[_soulBoundIndex] = SoulBoundData(
             soul,
@@ -123,8 +122,8 @@ contract CommunitySBT is ERC721URIStorage, Ownable {
             key,
             value
         );
-        soulBoundSoulMap[soul] = _soulBoundIndex;
-        soulBoundRecorderMap[msg.sender] = _soulBoundIndex;
+        soulBoundSoulMap[soul].push(_soulBoundIndex);
+        soulBoundRecorderMap[msg.sender].push(_soulBoundIndex);
 
         emit SoulBoundRecorded(soul,msg.sender,key,value);
 
@@ -163,7 +162,7 @@ contract CommunitySBT is ERC721URIStorage, Ownable {
         
         _soulBountDataRecord(address(this),
                             msg.sender,
-                            keccak256("addEvent"),
+                            bytes4(keccak256("addEvent")),
                             _eventId);
 
         return _eventId;
@@ -218,7 +217,7 @@ contract CommunitySBT is ERC721URIStorage, Ownable {
 
         _soulBountDataRecord(communityEventMap[eventId].communityOwner,
                             to,
-                            keccak256("Award"),
+                            bytes4(keccak256("Award")),
                             eventId);
 
     }
