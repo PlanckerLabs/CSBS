@@ -17,7 +17,7 @@ const useSave2IPFS = async (cName,cDescription,cLogo,cURL) => {
     let imageData = cLogo ? cLogo : "";
 
     let jsonData = {
-      community_name: cName,
+      name: cName,
       description: cDescription,
       attributes: [
         {"trait_type": "Community Logo",

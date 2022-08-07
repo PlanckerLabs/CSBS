@@ -6,11 +6,13 @@ const Create = () => {
   let cDescription ="Community description";
   let cLogo ="logo";
   let cURL ="https://123.com"
-  const createCommunity = useSave2IPFS(cName,cDescription,cLogo,cURL);
+  const CreateCommunity = ()=>{
+    useSave2IPFS(cName,cDescription,cLogo,cURL);
+  }
   return (
     <div className='create section__padding'>
       <div className="create-container">
-        <form className='writeForm' autoComplete='off'>         
+        <div className='writeForm' autoComplete='off'>         
           <div className="formGroup">
             <label>Upload a Community logo with 100*100</label>
             <input type="file" className='custom-file-input'
@@ -26,8 +28,8 @@ const Create = () => {
               <input type="text" placeholder='Community introduction URL'  />
             </div>
           </div>
-          <button className='writeButton'onClick={createCommunity} >Create my Community in Registry</button>
-        </form>
+          <button className='writeButton'onClick={CreateCommunity} >Create my Community in Registry</button>
+        </div>
       </div>
     </div>
    
