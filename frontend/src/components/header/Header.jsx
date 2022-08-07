@@ -5,16 +5,22 @@ import './header.css'
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import seller1 from '../../assets/seller1.jpg'
-import seller2 from '../../assets/seller2.png'
-import seller3 from '../../assets/seller3.png'
-import seller4 from '../../assets/seller4.png'
-import seller5 from '../../assets/seller5.png'
-import seller6 from '../../assets/seller6.jpg'
+// import seller1 from '../../assets/seller1.jpg'
+// import seller2 from '../../assets/seller2.png'
+// import seller3 from '../../assets/seller3.png'
+// import seller4 from '../../assets/seller4.png'
+// import seller5 from '../../assets/seller5.png'
+// import seller6 from '../../assets/seller6.jpg'
+import bids1 from '../../assets/bids1.png'
+import bids2 from '../../assets/bids2.png'
+import bids3 from '../../assets/bids3.png'
+import bids4 from '../../assets/bids4.png'
+import bids5 from '../../assets/bids5.png'
+import bids6 from '../../assets/bids6.png'
+
 import verify from '../../assets/verify.png'
 import a1 from '../../assets/1.jpeg'
 import a2 from '../../assets/2.jpeg'
-import coin from '../../assets/coin.png'
 import { Link  } from 'react-router-dom';
 
 const Header = () => {
@@ -101,68 +107,68 @@ const Header = () => {
             <div className='slider-card'>
               <p className='slider-card-number'>1</p>
               <div className="slider-img">
-                <img src={seller1} alt="" />
+                <img width='50%' height='50%' src={bids1} alt="" />
                 <img src={verify} className='verify' alt="" />
               </div>
-              <Link to={`/profile/Rian`}>
-              <p className='slider-card-name'>James Bond</p>
+              <Link to={`/eventProfile/Rian`}>
+              <p className='slider-card-name'>ETH DevCon London</p>
               </Link>
-              <p className='slider-card-price'>5.250 <span>ETH</span></p>
+              <p className='slider-card-price'>2022-9-10 <span>London</span></p>
             </div>
             <div className='slider-card'>
               <p className='slider-card-number'>2</p>
               <div className="slider-img">
-                <img src={seller2} alt="" />
+                <img src={bids2} alt="" />
                 <img src={verify} className='verify' alt="" />
               </div>
-              <Link to={`/profile/Rian`}>
-              <p className='slider-card-name'>Rian Leon</p>
+              <Link to={`/eventProfile/Rian`}>
+              <p className='slider-card-name'>ETH DevCon London</p>
               </Link>
-              <p className='slider-card-price'>4.932 <span>ETH</span></p>
+              <p className='slider-card-price'>2022-9-10 <span>London</span></p>
             </div>
             <div className='slider-card'>
               <p className='slider-card-number'>3</p>
               <div className="slider-img">
-                <img src={seller3} alt="" />
+                <img src={bids3} alt="" />
                 <img src={verify} className='verify' alt="" />
               </div>
-              <Link to={`/profile/Rian`}>
-              <p className='slider-card-name'>Lady Young</p>
+              <Link to={`/eventProfile/Rian`}>
+              <p className='slider-card-name'>ETH DevCon London</p>
               </Link>
-              <p className='slider-card-price'>4.620 <span>ETH</span></p>
+              <p className='slider-card-price'>2022-9-10 <span>London</span></p>
             </div>
             <div className='slider-card'>
               <p className='slider-card-number'>4</p>
               <div className="slider-img">
-                <img src={seller4} alt="" />
+                <img src={bids4} alt="" />
                 <img src={verify} className='verify' alt="" />
               </div>
-              <Link to={`/profile/Rian`}>
-              <p className='slider-card-name'>Black Glass</p>
+              <Link to={`/eventProfile/Rian`}>
+              <p className='slider-card-name'>ETH DevCon London</p>
               </Link>
-              <p className='slider-card-price'>4.125 <span>ETH</span></p>
+              <p className='slider-card-price'>2022-9-10 <span>London</span></p>
             </div>
             <div className='slider-card'>
               <p className='slider-card-number'>5</p>
               <div className="slider-img">
-                <img src={seller5} alt="" />
+                <img src={bids5} alt="" />
                 <img src={verify} className='verify' alt="" />
               </div>
-              <Link to={`/profile/Rian`}>
-              <p className='slider-card-name'>Budhiman</p>
+              <Link to={`/eventProfile/Rian`}>
+              <p className='slider-card-name'>ETH DevCon London</p>
               </Link>
-              <p className='slider-card-price'>3.921 <span>ETH</span></p>
+              <p className='slider-card-price'>2022-9-10 <span>London</span></p>
             </div>
             <div className='slider-card'>
               <p className='slider-card-number'>6</p>
               <div className="slider-img">
-                <img src={seller6} alt="" />
+                <img src={bids6} alt="" />
                 <img src={verify} className='verify' alt="" />
               </div>
-              <Link to={`/profile/Rian`}>
-              <p className='slider-card-name'>Alex</p>
+              <Link to={`/eventProfile/Rian`}>
+              <p className='slider-card-name'>ETH DevCon London</p>
               </Link>
-              <p className='slider-card-price'>3.548 <span>ETH</span></p>
+              <p className='slider-card-price'>2022-9-10 <span>London</span></p>
             </div>
         </Slider>
       </div>
