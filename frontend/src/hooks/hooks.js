@@ -1,6 +1,6 @@
 /* Create the IPFS CID of the json data */
 import { NFTStorage } from "nft.storage";
-const useSave2IPFS = async (cName,cDescription,cLogo,cURL) => {
+const useSave2IPFS = async (cName,cDescription,imageData,cURL) => {
 
     //image contains any File or Blob you want to save
     // let imageData = new File(
@@ -14,14 +14,12 @@ const useSave2IPFS = async (cName,cDescription,cLogo,cURL) => {
     // );
     // console.log("imageData:::::",imageData);
 
-    let imageData = cLogo ? cLogo : "";
-
     let jsonData = {
       name: cName,
       description: cDescription,
       attributes: [
         {"trait_type": "Community Logo",
-        "value": cLogo
+        "value": imageData
       },       
         {"trait_type": "Introduction URL",
       "value": cURL

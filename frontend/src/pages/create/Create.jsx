@@ -1,13 +1,18 @@
 import './create.css'
 import {useSave2IPFS} from '../../hooks/hooks.js'
+import { useState } from "react";
 // import Image from '../../assets/Image.png'
+
 const Create = () => {
   let cName = "Community Name Example";
   let cDescription ="Community description";
-  let cLogo ="logo";
   let cURL ="https://123.com"
+
+  const [fileBlob, setFileBlob] = useState("");
+
   const CreateCommunity = ()=>{
-    useSave2IPFS(cName,cDescription,cLogo,cURL);
+    let imageData = fileBlob.files[0];
+    useSave2IPFS(cName,cDescription,imageData,cURL);
   }
   return (
     <div className='create section__padding'>
@@ -15,7 +20,7 @@ const Create = () => {
         <div className='writeForm' autoComplete='off'>         
           <div className="formGroup">
             <label>Upload a Community logo with 100*100</label>
-            <input type="file" className='custom-file-input'
+            <input type="file" className='custom-file-input' required onChange={(e) => setFileBlob(e.target)}
           />
           </div>
           <div className="formGroup">
