@@ -3,12 +3,11 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract CommunitySBT is ERC721URIStorage, Ownable {
+contract CommunitySBT is ERC721URIStorage {
     using Strings for uint256;
     using ECDSA for bytes32;
     using Counters for Counters.Counter;
