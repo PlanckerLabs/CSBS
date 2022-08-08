@@ -46,4 +46,19 @@ const useSave2IPFS = async (cName,cDescription,imageData,cURL) => {
     }
   };
 
-  export {useSave2IPFS};
+//   merge baseSVG and markedName into one picture
+  const useMergeSvg = async (baseSVG, markedName, svgName) => {
+    let imageData = new File(
+        [
+          `${baseSVG}${markedName}</text></svg>`,
+        ],
+        svgName,
+        {
+          type: "image/svg+xml",
+        }
+      );
+      console.log("imageData:::::",imageData);
+    return ;
+  };
+
+  export {useSave2IPFS, useMergeSvg};
