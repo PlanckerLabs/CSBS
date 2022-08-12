@@ -40,27 +40,28 @@ contract CommunitySBT is ERC721URIStorage {
     uint256 _soulBoundIndex;
 
     struct SoulBoundData {
-        address soul;
-        address recorder;
+        address Issuer;
+        address receiver;
         bytes32 key;
         uint256 value;
     }
 
-    // index => SoulBoundData
-    mapping(uint256 => SoulBoundData) private  soulBoundDataRecordMap;
+    // tokenId => SoulBoundData
+    mapping(uint256 => SoulBoundData) private  soulBoundDatas;
 
-    // soul => SoulBoundData index
-    mapping(address => uint256[]) private soulBoundSoulMap;
+    // receiver => tokenId list
+    mapping(address => uint256[]) private ownSBTs;
 
-    // recorder => SoulBoundData index
-    mapping(address => uint256[]) private soulBoundRecorderMap;
+    // issuer => tokenId list
+    mapping(address => uint256[]) private issueSBTs;
 
     /**
      * soul bount data recorded
      */
-    event SoulBoundRecorded(
-        address indexed soul,
-        address indexed recorder,
+    event issuedSBT(
+        uint256 tokenId,
+        address indexed receiver,
+        address indexed issuer,
         bytes4 indexed key,
         uint256 value
     );
@@ -83,62 +84,67 @@ contract CommunitySBT is ERC721URIStorage {
 
 
     // get soulBoundDataRecordMap
-    function getSoulBoundDataRecordMap(uint256 index) public view returns (SoulBoundData memory) {
-        return soulBoundDataRecordMap[index];
-    }
+    // function getSoulBoundDataMap(uint256 index) public view returns (SoulBoundData memory) {
+    //     return soulBoundDataMap[index];
+    // }
 
-    // get soulBoundSoulMap
-    function getSoulBoundSoulMap(address soul) public view returns (uint256[] memory) {
-        return soulBoundSoulMap[soul];
-    }
+    // // get soulBoundSoulMap
+    // function getSoulBoundSoulMap(address soul) public view returns (uint256[] memory) {
+    //     return soulBoundDataMap[soul];
+    // }
 
-    // get soulBoundRecorderMap
-    function getSoulBoundRecorderMap(address recorder) public view returns (uint256[] memory) {
-        return soulBoundRecorderMap[recorder];
-    }
+    // // get soulBoundRecorderMap
+    // function getSoulBoundMap(address recorder) public view returns (uint256[] memory) {
+    //     return soulBoundIssuerMap[recorder];
+    // }
 
-    // get communityEventMap
-    function getCommunityEventMap(uint256 index) public view returns (CommunityEvent memory) {
-        return communityEventMap[index];
-    }
+    // // get communityEventMap
+    // function getCommunityEventMap(uint256 index) public view returns (CommunityEvent memory) {
+    //     return communityEventMap[index];
+    // }
 
-    // get tokenEventMap
-    function getTokenEventMap(uint256 tokenId) public view returns (CommunityEvent memory) {
-        return communityEventMap[tokenEventMap[tokenId]];
-    }
+    // // get tokenEventMap
+    // function getTokenEventMap(uint256 tokenId) public view returns (CommunityEvent memory) {
+    //     return communityEventMap[tokenEventMap[tokenId]];
+    // }
 
     /**
      * record soul bound data
      */
-    function soulBountDataRecord(address soul,bytes4 key,uint256 value) public {
-        _soulBountDataRecord(msg.sender,soul,key,value);
+    function issueSBT(address soul,bytes4 key,uint256 eventId,string calldata tokenUri) public {
+        _issueSBT(msg.sender,soul,key,eventId);
     }
 
-    function _soulBountDataRecord(address recorder,address soul,bytes4 key,uint256 value) private {
+    function _issueSBT(address issuer,address receiver,bytes4 key,uint256 value) private {
 
-        soulBoundDataRecordMap[_soulBoundIndex] = SoulBoundData(
-            soul,
-            recorder,
+        
+        uint256 tokenId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+
+        soulBoundDatas[tokenId] = SoulBoundData(
+            tokenId,
+            issuer,
+            receiver,
             key,
             value
         );
-        soulBoundSoulMap[soul].push(_soulBoundIndex);
-        soulBoundRecorderMap[msg.sender].push(_soulBoundIndex);
 
-        emit SoulBoundRecorded(soul,msg.sender,key,value);
+        ownSBTs[receiver].push(tokenId);
+        issueSBTs[msg.sender].push(tokenId);
 
-    unchecked {
-        _soulBoundIndex += 1;
+        emit issuedSBT(msg.sender,receiver,key,value);
+
+        unchecked {
+            _soulBoundIndex ++;
+        }
+
     }
-
-    }
-
-
 
     modifier onlyCommunitySigner(uint256 eventId) {
         require(communityEventMap[eventId].communitySigner == msg.sender);
         _;
     }
+
     modifier onlyCommunityOwner(uint256 eventId) {
         require(communityEventMap[eventId].communityOwner == msg.sender);
         _;
@@ -147,7 +153,7 @@ contract CommunitySBT is ERC721URIStorage {
     /**
      * add event
      */
-    function addEvent(
+    function createEvent(
         address communitySigner,
         string calldata eventUri,
         string calldata baseTokenUri
@@ -174,7 +180,7 @@ contract CommunitySBT is ERC721URIStorage {
     /**
      * update event data, only community owner can do this
      */
-    function eventUpdate(
+    function updateEvent(
         uint eventId,
         string calldata eventUri, 
         string calldata baseTokenUri
@@ -302,37 +308,15 @@ contract CommunitySBT is ERC721URIStorage {
 
     }
 
-    modifier SoulBoundTokenTransferModifier() {
-        require(msg.sender == address(0),"SoulBound token cannot be transfered");// ignored "unreachable code" warning
-        _;
+   function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal virtual override {
+        if(from != address(0) && to != address(0)){
+            revert("SBT is disable to transfer");
+        }
     }
 
-    /**
-     * ban token transfer
-     */
-    function transferFrom(
-        address from,
-        address to,
-        uint256 tokenId
-    ) public override(ERC721) SoulBoundTokenTransferModifier {}
-
-    /**
-     * ban token transfer
-     */
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 tokenId
-    ) public override(ERC721) SoulBoundTokenTransferModifier {}
-
-    /**
-     * ban token transfer
-     */
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 tokenId,
-        bytes memory _data
-    ) public override(ERC721) SoulBoundTokenTransferModifier {}
 
 }
