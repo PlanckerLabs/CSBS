@@ -34,21 +34,8 @@ contract CommunitySBT is ERC721URIStorage {
         /**
          * prefix for tokenURI
          */
-        string baseTokenUri; //每个event是一批NFT，每个NFT都有一个ipfs，为了省钱，ipfs链接是个json文件，是
+        string baseTokenUri; //每个event是一批NFT，每个NFT都有一个ipfs，为了省钱，ipfs链接是个json文件
     }
-
-    uint256 _soulBoundIndex;
-
-    struct SoulBoundData {
-        uint256 tokenId;
-        address Issuer;
-        address receiver;
-        bytes32 key;
-        uint256 value;
-    }
-
-    // tokenId => SoulBoundData
-    mapping(uint256 => SoulBoundData) public  soulBoundDatas;
 
     // receiver => tokenId list
     mapping(address => uint256[]) public ownSBTs;
@@ -60,11 +47,10 @@ contract CommunitySBT is ERC721URIStorage {
      * soul bount data recorded
      */
     event issuedSBT(
-        uint256 tokenId,
+        uint256 indexed tokenId,
         address indexed receiver,
         address indexed issuer,
-        bytes4 indexed key,
-        uint256 value
+        uint256 eventId
     );
 
     // eventId => CommunityEvent
@@ -91,33 +77,21 @@ contract CommunitySBT is ERC721URIStorage {
     /**
      * record soul bound data
      */
-    function issueSBT(address soul,bytes4 key,uint256 eventId) public returns(uint256){
-        return _issueSBT(msg.sender,soul,key,eventId);
+    function issueSBT(address soul,uint256 eventId) public returns(uint256){
+        return _issueSBT(msg.sender,soul,eventId);
     }
 
-    function _issueSBT(address issuer,address receiver,bytes4 key,uint256 value) private returns(uint256){
+    function _issueSBT(address issuer,address receiver,uint256 eventId) private returns(uint256){
 
         
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
 
-        soulBoundDatas[tokenId] = SoulBoundData(
-            tokenId,
-            issuer,
-            receiver,
-            key,
-            value
-        );
-
         ownSBTs[receiver].push(tokenId);
         issueSBTs[msg.sender].push(tokenId);
         _safeMint(receiver, tokenId);
 
-        emit issuedSBT(tokenId,msg.sender,receiver,key,value);
-
-        unchecked {
-            _soulBoundIndex ++;
-        }
+        emit issuedSBT(tokenId,msg.sender,receiver,eventId);
 
         return tokenId;
 
@@ -194,12 +168,12 @@ contract CommunitySBT is ERC721URIStorage {
         require(addressAwardedMap[addressAwardKey] == false, "Already awarded");
         addressAwardedMap[addressAwardKey] = true;
 
-
-        uint256 tokenId = _issueSBT(communityEventMap[eventId].communityOwner,
+        
+        uint256 tokenId = _issueSBT(
+                            communityEventMap[eventId].communityOwner,
                             to,
-                            bytes4(keccak256("Award")),
-                            eventId);
-
+                            eventId
+                        );
         tokenEventMap[tokenId] = eventId;
         _setTokenURI(tokenId, tokenUri);
 
