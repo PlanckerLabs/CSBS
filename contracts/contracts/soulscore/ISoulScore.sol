@@ -9,7 +9,7 @@ interface ISoulScore {
     event AddScore(
         address indexed recorder,
         address indexed soul,
-        bytes8 events,
+        bytes8 indexed events,
         uint256 score,
         uint256 finalScore
     );
@@ -20,7 +20,7 @@ interface ISoulScore {
     event SubScore(
         address indexed recorder,
         address indexed soul,
-        bytes8 events,
+        bytes8 indexed events,
         uint256 score,
         uint256 finalScore
     );
