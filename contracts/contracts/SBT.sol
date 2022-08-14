@@ -40,11 +40,11 @@ contract CommunitySBT is ERC721URIStorage {
     // receiver => tokenId list
     mapping(address => uint256[]) public ownSBTs;
 
-    // issuer => tokenId list
-    mapping(address => uint256[]) public issueSBTs;
+    // eventId => tokenId list
+    mapping(uint256 => uint256[]) public containSBTs;
 
     /**
-     * soul bount data recorded
+     * soul bound data recorded
      */
     event issuedSBT(
         uint256 indexed tokenId,
@@ -77,18 +77,18 @@ contract CommunitySBT is ERC721URIStorage {
     /**
      * record soul bound data
      */
-    function issueSBT(address soul,uint256 eventId) public returns(uint256){
-        return _issueSBT(msg.sender,soul,eventId);
+    function issueSBT(address reveiver,uint256 eventId) public returns(uint256){
+        return _issueSBT(reveiver,eventId);
     }
 
-    function _issueSBT(address issuer,address receiver,uint256 eventId) private returns(uint256){
+    function _issueSBT(address receiver,uint256 eventId) private returns(uint256){
 
         
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
 
         ownSBTs[receiver].push(tokenId);
-        issueSBTs[msg.sender].push(tokenId);
+        containSBTs[eventId].push(tokenId);
         _safeMint(receiver, tokenId);
 
         emit issuedSBT(tokenId,msg.sender,receiver,eventId);
@@ -155,7 +155,7 @@ contract CommunitySBT is ERC721URIStorage {
         address newCommunitySigner
     ) public onlyCommunityOwner(eventId){
 
-        require( address(0) != newCommunityOwner && address(0) != newCommunitySigner );
+        require( address(0) != newCommunityOwner && address(0) != newCommunitySigner ,"No Enough Power");
         CommunityEvent storage communityEvent = communityEventMap[eventId];
         communityEvent.communityOwner = newCommunityOwner;
         communityEvent.communitySigner = newCommunitySigner;
@@ -170,7 +170,6 @@ contract CommunitySBT is ERC721URIStorage {
 
         
         uint256 tokenId = _issueSBT(
-                            communityEventMap[eventId].communityOwner,
                             to,
                             eventId
                         );
@@ -216,7 +215,6 @@ contract CommunitySBT is ERC721URIStorage {
     ) public checkCommunitySign(eventId,signature,
                                 keccak256(abi.encodePacked(msg.sender, eventId, tokenUriSuffix))
                                 ) {
-        
         _issueSBTWithEvent(msg.sender, eventId, tokenUriSuffix);
     
     }
@@ -224,7 +222,7 @@ contract CommunitySBT is ERC721URIStorage {
     /**
      * transfer ownership of the given token with community Sign
      */
-    function changeAddress(
+    function transferSBT(
         uint256 tokenId,
         uint eventId,
         address newAddress,
@@ -238,6 +236,7 @@ contract CommunitySBT is ERC721URIStorage {
         addressAwardedMap[addressAwardKey] = true;
 
         _safeTransfer(msg.sender, newAddress, tokenId, "");
+        
 
     }
 
@@ -260,6 +259,25 @@ contract CommunitySBT is ERC721URIStorage {
    modifier SoulBoundTokenTransferModifier() {
         require(msg.sender == address(0),"SoulBound token cannot be transfered");// ignored "unreachable code" warning
         _;
+    }
+
+    function _transfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal virtual override{
+        super._transfer(from,to,tokenId);
+        uint256[] memory tokenIdList = ownSBTs[from];
+        uint256 tokenIdIndex;
+        for (tokenIdIndex =0;tokenIdIndex<tokenIdList.length;tokenIdIndex++){
+            if (tokenIdList[tokenIdIndex] == tokenId){
+                break;
+            }
+        }
+        
+        // remove the tokenId according to the tokenIdIndex
+        ownSBTs[from][tokenIdIndex] = ownSBTs[from][tokenIdList.length-1];
+        ownSBTs[from].pop();
     }
 
     /**
