@@ -6,8 +6,9 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract CommunitySBT is ERC721URIStorage {
+contract CommunitySBT is ERC721URIStorage, Ownable {
     using Strings for uint256;
     using ECDSA for bytes32;
     using Counters for Counters.Counter;
@@ -77,13 +78,12 @@ contract CommunitySBT is ERC721URIStorage {
     /**
      * record soul bound data
      */
-    function issueSBT(address reveiver,uint256 eventId) public returns(uint256){
-        return _issueSBT(reveiver,eventId);
+    function issueSBT(address community, address reveiver,uint256 eventId) public returns(uint256){
+        return _issueSBT(community,reveiver,eventId);
     }
 
-    function _issueSBT(address receiver,uint256 eventId) private returns(uint256){
+    function _issueSBT(address community, address receiver, uint256 eventId) private returns(uint256){
 
-        
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
 
@@ -91,7 +91,7 @@ contract CommunitySBT is ERC721URIStorage {
         containSBTs[eventId].push(tokenId);
         _safeMint(receiver, tokenId);
 
-        emit issuedSBT(tokenId,msg.sender,receiver,eventId);
+        emit issuedSBT(tokenId,community,receiver,eventId);
 
         return tokenId;
 
@@ -111,19 +111,20 @@ contract CommunitySBT is ERC721URIStorage {
      * add event
      */
     function createEvent(
+        address communityOwner,
         address communitySigner,
         string calldata eventUri,
         string calldata baseTokenUri
-    ) public returns (uint256) {
+    ) public onlyOwner returns (uint256) {
 
-        require( address(0) != communitySigner );
+        require( address(0) != communitySigner && address(0) != communityOwner);
 
         uint256 eventId = _eventId;
 
         unchecked {
             eventId += 1;
         }
-        communityEventMap[eventId] = CommunityEvent(msg.sender, communitySigner, eventUri, baseTokenUri);
+        communityEventMap[eventId] = CommunityEvent(communityOwner, communitySigner, eventUri, baseTokenUri);
 
         _eventId = eventId;
         
@@ -155,21 +156,22 @@ contract CommunitySBT is ERC721URIStorage {
         address newCommunitySigner
     ) public onlyCommunityOwner(eventId){
 
-        require( address(0) != newCommunityOwner && address(0) != newCommunitySigner ,"No Enough Power");
+        require( address(0) != newCommunityOwner && address(0) != newCommunitySigner ,"community controller can not be zero-address");
         CommunityEvent storage communityEvent = communityEventMap[eventId];
         communityEvent.communityOwner = newCommunityOwner;
         communityEvent.communitySigner = newCommunitySigner;
 
     }
 
-    function _issueSBTWithEvent(address to,uint256 eventId,string calldata tokenUri) private {
+    function _issueSBTWithEvent(address community,address to,uint256 eventId,string calldata tokenUri) private {
         
         bytes32 addressAwardKey = keccak256(abi.encodePacked(to,eventId));
-        require(addressAwardedMap[addressAwardKey] == false, "Already awarded");
+        require(addressAwardedMap[addressAwardKey] == false, "Already issued");
         addressAwardedMap[addressAwardKey] = true;
 
         
         uint256 tokenId = _issueSBT(
+                            community,
                             to,
                             eventId
                         );
@@ -188,9 +190,9 @@ contract CommunitySBT is ERC721URIStorage {
     ) public onlyCommunitySigner(eventId) {
 
         require( toArr.length == tokenUriSuffixArr.length );
-
+        address communityOwner = communityEventMap[eventId].communityOwner;
         for (uint256 i = 0; i < toArr.length;) {
-            _issueSBTWithEvent(toArr[i], eventId, tokenUriSuffixArr[i]);
+            _issueSBTWithEvent(communityOwner, toArr[i], eventId, tokenUriSuffixArr[i]);
             unchecked { 
                 i += 1; 
             }
@@ -215,7 +217,7 @@ contract CommunitySBT is ERC721URIStorage {
     ) public checkCommunitySign(eventId,signature,
                                 keccak256(abi.encodePacked(msg.sender, eventId, tokenUriSuffix))
                                 ) {
-        _issueSBTWithEvent(msg.sender, eventId, tokenUriSuffix);
+        _issueSBTWithEvent(communityEventMap[eventId].communityOwner, msg.sender, eventId, tokenUriSuffix);
     
     }
 
