@@ -16,14 +16,6 @@ function checkArray(f, got, want) {
 
 
 describe("SBT Test", async function () {
-    let sbtInstance;
-  
-    // beforeEach(async () => {
-    //     let factory = await ethers.getContractFactory("SBT");
-    //     let sbtInstance = await factory.deploy();
-    //     await sbtInstance.deployed();
-    // });
-  
   
     it("Check ERC721",async function(){
         let [operator, acc1, acc2] = await ethers.getSigners();
