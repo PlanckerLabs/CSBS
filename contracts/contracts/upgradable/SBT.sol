@@ -69,11 +69,15 @@ contract SBT is SBTStorage, ERC721URIStorageUpgradeable, OwnableUpgradeable {
     using ECDSAUpgradeable for bytes32;
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
-    function initialize(string memory name_,string memory symbol_) public onlyInitializing {
+
+    function callInitFuncData(string memory name_,string memory symbol_)public pure returns(bytes memory){
+         return abi.encodeWithSignature("initialize(string,string)", name_,symbol_);
+    }
+
+    function initialize(string memory name_,string memory symbol_) public initializer {
         __ERC721_init(name_, symbol_);
         __Ownable_init();
     }
-
 
     // get tokenEventMap
     function getCommunityEventByTokenId(uint256 tokenId) public view returns (CommunityEvent memory) {
