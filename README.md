@@ -28,3 +28,4 @@ https://www.notion.so/greenpillcn/Community-SBT-Basket-and-Seal-2651bd5d756e43ee
 + 8-03 fixed some frontend, discuss the contract, coding now!
 + 8-17 hhh add contract upgrade with openzepplin
 + 8-26 add basket and seal design
++ 9-4 hold a open talk about 0.1 version
