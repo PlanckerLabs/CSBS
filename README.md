@@ -1,5 +1,7 @@
 # CSBS
 ## Community  SBT Basket and Seal
++ Community  SBT Basket and Seal：一款免费开源的SBT DApp，帮助社区和多重身份的个体来发行和管理分散于各个社区Event、Activity的时光碎片。
+
 + 源于DAOAtalas的一次社区交接：https://www.notion.so/greenpillcn/DAO-Atlas-2b96ffb990b84fab854ad846235beacd
 + 需要铸造NFT，但我们不想铸造普通的图片NFT，而是关联社区的，个人拥有的，对一段有意义活动的记录，并且不可转移.
 + 因此选择了Soul Bound Token，算是一次研究和实践的尝试。
