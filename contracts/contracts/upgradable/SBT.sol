@@ -1,17 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract CommunitySBT is ERC721URIStorage {
-    using Strings for uint256;
-    using ECDSA for bytes32;
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIdCounter;
+contract SBTStorage {
+    CountersUpgradeable.Counter internal _tokenIdCounter;
 
     uint _eventId;
 
@@ -34,111 +31,86 @@ contract CommunitySBT is ERC721URIStorage {
         /**
          * prefix for tokenURI
          */
-        string baseTokenUri; //每个event是一批NFT，每个NFT都有一个ipfs，为了省钱，ipfs链接是个json文件，是
+        string baseTokenUri; //每个event是一批NFT，每个NFT都有一个ipfs，为了省钱，ipfs链接是个json文件
     }
 
-    uint256 _soulBoundIndex;
+    // receiver => tokenId list
+    mapping(address => uint256[]) public ownSBTs;
 
-    struct SoulBoundData {
-        address soul;
-        address recorder;
-        bytes32 key;
-        uint256 value;
-    }
-
-    // index => SoulBoundData
-    mapping(uint256 => SoulBoundData) private  soulBoundDataRecordMap;
-
-    // soul => SoulBoundData index
-    mapping(address => uint256[]) private soulBoundSoulMap;
-
-    // recorder => SoulBoundData index
-    mapping(address => uint256[]) private soulBoundRecorderMap;
+    // eventId => tokenId list
+    mapping(uint256 => uint256[]) public containSBTs;
 
     /**
-     * soul bount data recorded
+     * soul bound data recorded
      */
-    event SoulBoundRecorded(
-        address indexed soul,
-        address indexed recorder,
-        bytes4 indexed key,
-        uint256 value
+    event issuedSBT(
+        uint256 indexed tokenId,
+        address indexed receiver,
+        address indexed issuer,
+        uint256 eventId
     );
 
     // eventId => CommunityEvent
-    mapping(uint256 => CommunityEvent) private communityEventMap;
+    mapping(uint256 => CommunityEvent) public communityEventMap;
 
     // tokenId => eventId 
-    mapping(uint256 => uint256) private tokenEventMap;
+    mapping(uint256 => uint256) public tokenEventMap;
 
     // singature => is used
-    mapping(bytes32 => bool) private usedSingatureMap;
+    mapping(bytes32 => bool) public usedSingatureMap;
 
     // bytes32(address,eventid) => has been awarded
-    mapping(bytes32 => bool) private addressAwardedMap;
+    mapping(bytes32 => bool) public addressAwardedMap;
+}
 
-    constructor(string memory name,string memory symbol) ERC721(name,symbol) {
+
+contract SBT is SBTStorage, ERC721URIStorageUpgradeable, OwnableUpgradeable {
+    using StringsUpgradeable for uint256;
+    using ECDSAUpgradeable for bytes32;
+    using CountersUpgradeable for CountersUpgradeable.Counter;
+
+
+    function callInitFuncData(string memory name_,string memory symbol_)public pure returns(bytes memory){
+         return abi.encodeWithSignature("initialize(string,string)", name_,symbol_);
     }
 
-
-
-    // get soulBoundDataRecordMap
-    function getSoulBoundDataRecordMap(uint256 index) public view returns (SoulBoundData memory) {
-        return soulBoundDataRecordMap[index];
-    }
-
-    // get soulBoundSoulMap
-    function getSoulBoundSoulMap(address soul) public view returns (uint256[] memory) {
-        return soulBoundSoulMap[soul];
-    }
-
-    // get soulBoundRecorderMap
-    function getSoulBoundRecorderMap(address recorder) public view returns (uint256[] memory) {
-        return soulBoundRecorderMap[recorder];
-    }
-
-    // get communityEventMap
-    function getCommunityEventMap(uint256 index) public view returns (CommunityEvent memory) {
-        return communityEventMap[index];
+    function initialize(string memory name_,string memory symbol_) public initializer {
+        __ERC721_init(name_, symbol_);
+        __Ownable_init();
     }
 
     // get tokenEventMap
-    function getTokenEventMap(uint256 tokenId) public view returns (CommunityEvent memory) {
+    function getCommunityEventByTokenId(uint256 tokenId) public view returns (CommunityEvent memory) {
         return communityEventMap[tokenEventMap[tokenId]];
     }
 
     /**
      * record soul bound data
      */
-    function soulBountDataRecord(address soul,bytes4 key,uint256 value) public {
-        _soulBountDataRecord(msg.sender,soul,key,value);
+    function issueSBT(address community, address reveiver,uint256 eventId) public returns(uint256){
+        return _issueSBT(community,reveiver,eventId);
     }
 
-    function _soulBountDataRecord(address recorder,address soul,bytes4 key,uint256 value) private {
+    function _issueSBT(address community, address receiver, uint256 eventId) private returns(uint256){
 
-        soulBoundDataRecordMap[_soulBoundIndex] = SoulBoundData(
-            soul,
-            recorder,
-            key,
-            value
-        );
-        soulBoundSoulMap[soul].push(_soulBoundIndex);
-        soulBoundRecorderMap[msg.sender].push(_soulBoundIndex);
+        uint256 tokenId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
 
-        emit SoulBoundRecorded(soul,msg.sender,key,value);
+        ownSBTs[receiver].push(tokenId);
+        containSBTs[eventId].push(tokenId);
+        _safeMint(receiver, tokenId);
 
-    unchecked {
-        _soulBoundIndex += 1;
-    }
+        emit issuedSBT(tokenId,community,receiver,eventId);
+
+        return tokenId;
 
     }
-
-
 
     modifier onlyCommunitySigner(uint256 eventId) {
         require(communityEventMap[eventId].communitySigner == msg.sender);
         _;
     }
+
     modifier onlyCommunityOwner(uint256 eventId) {
         require(communityEventMap[eventId].communityOwner == msg.sender);
         _;
@@ -147,34 +119,32 @@ contract CommunitySBT is ERC721URIStorage {
     /**
      * add event
      */
-    function addEvent(
+    function createEvent(
+        address communityOwner,
         address communitySigner,
         string calldata eventUri,
         string calldata baseTokenUri
-    ) public returns (uint256) {
+    ) public onlyOwner returns (uint256) {
 
-        require( address(0) != communitySigner );
+        require( address(0) != communitySigner && address(0) != communityOwner);
 
-    unchecked {
-        _eventId += 1;
-    }
-        communityEventMap[_eventId] = CommunityEvent(msg.sender, communitySigner, eventUri, baseTokenUri);
+        uint256 eventId = _eventId;
+
+        unchecked {
+            eventId += 1;
+        }
+        communityEventMap[eventId] = CommunityEvent(communityOwner, communitySigner, eventUri, baseTokenUri);
+
+        _eventId = eventId;
         
-        _soulBountDataRecord(address(this),
-                            msg.sender,
-                            bytes4(keccak256("addEvent")),
-                            _eventId);
-
-        return _eventId;
+        return eventId;
 
     }
-    //可以根据eventid查到信息
-    // 添加事件，每次调用，event与eventId形成一个映射关系，eventId + 1
 
     /**
      * update event data, only community owner can do this
      */
-    function eventUpdate(
+    function updateEvent(
         uint eventId,
         string calldata eventUri, 
         string calldata baseTokenUri
@@ -189,55 +159,52 @@ contract CommunitySBT is ERC721URIStorage {
     /**
      * update the community owner and signer of the event
      */
-    function eventControllerUpdate(
+    function transferEventController(
         uint eventId,
         address newCommunityOwner,
         address newCommunitySigner
     ) public onlyCommunityOwner(eventId){
 
-        require( address(0) != newCommunityOwner && address(0) != newCommunitySigner );
+        require( address(0) != newCommunityOwner && address(0) != newCommunitySigner ,"community controller can not be zero-address");
         CommunityEvent storage communityEvent = communityEventMap[eventId];
         communityEvent.communityOwner = newCommunityOwner;
         communityEvent.communitySigner = newCommunitySigner;
 
     }
 
-    function _Award(address to,uint256 eventId,string calldata tokenUri) private {
+    function _issueSBTWithEvent(address community,address to,uint256 eventId,string calldata tokenUri) private {
         
         bytes32 addressAwardKey = keccak256(abi.encodePacked(to,eventId));
-        require(addressAwardedMap[addressAwardKey] == false, "Already awarded");
+        require(addressAwardedMap[addressAwardKey] == false, "Already issued");
         addressAwardedMap[addressAwardKey] = true;
 
-        uint256 tokenId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
-
-        tokenEventMap[tokenId] = eventId;
-        _safeMint(to, tokenId);
-        _setTokenURI(tokenId, tokenUri);
-
-        _soulBountDataRecord(communityEventMap[eventId].communityOwner,
+        
+        uint256 tokenId = _issueSBT(
+                            community,
                             to,
-                            bytes4(keccak256("Award")),
-                            eventId);
+                            eventId
+                        );
+        tokenEventMap[tokenId] = eventId;
+        _setTokenURI(tokenId, tokenUri);
 
     }
 
     /**
      * communitySigner award token to address[]
      */
-    function issuerAwards(
+    function issueBatchSBTWithEvent(
         uint256 eventId,
         address[] calldata toArr,
         string[] calldata tokenUriSuffixArr
     ) public onlyCommunitySigner(eventId) {
 
         require( toArr.length == tokenUriSuffixArr.length );
-
+        address communityOwner = communityEventMap[eventId].communityOwner;
         for (uint256 i = 0; i < toArr.length;) {
-            _Award(toArr[i], eventId, tokenUriSuffixArr[i]);
-        unchecked { 
-            i += 1; 
-        }
+            _issueSBTWithEvent(communityOwner, toArr[i], eventId, tokenUriSuffixArr[i]);
+            unchecked { 
+                i += 1; 
+            }
         }
 
     }
@@ -246,30 +213,27 @@ contract CommunitySBT is ERC721URIStorage {
 
         bytes32 message = packedhash.toEthSignedMessageHash();
         require(message.recover(signature) == communityEventMap[eventId].communitySigner,"wrong signature");
-
         _;
-
     }
 
     /**
      * user claim token with community sign
      */
-    function userAwards(
+    function issueSBTWithEvent(
         uint256 eventId,
         string calldata tokenUriSuffix,
         bytes calldata signature
     ) public checkCommunitySign(eventId,signature,
                                 keccak256(abi.encodePacked(msg.sender, eventId, tokenUriSuffix))
                                 ) {
-        
-        _Award(msg.sender, eventId, tokenUriSuffix);
+        _issueSBTWithEvent(communityEventMap[eventId].communityOwner, msg.sender, eventId, tokenUriSuffix);
     
     }
 
     /**
      * transfer ownership of the given token with community Sign
      */
-    function changeAddress(
+    function transferSBT(
         uint256 tokenId,
         uint eventId,
         address newAddress,
@@ -283,6 +247,7 @@ contract CommunitySBT is ERC721URIStorage {
         addressAwardedMap[addressAwardKey] = true;
 
         _safeTransfer(msg.sender, newAddress, tokenId, "");
+        
 
     }
 
@@ -290,7 +255,7 @@ contract CommunitySBT is ERC721URIStorage {
     function tokenURI(uint256 tokenId)
         public
         view
-        override(ERC721URIStorage)
+        override(ERC721URIStorageUpgradeable)
         returns (string memory)
     {
 
@@ -302,9 +267,28 @@ contract CommunitySBT is ERC721URIStorage {
 
     }
 
-    modifier SoulBoundTokenTransferModifier() {
+   modifier SoulBoundTokenTransferModifier() {
         require(msg.sender == address(0),"SoulBound token cannot be transfered");// ignored "unreachable code" warning
         _;
+    }
+
+    function _transfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal virtual override{
+        super._transfer(from,to,tokenId);
+        uint256[] memory tokenIdList = ownSBTs[from];
+        uint256 tokenIdIndex;
+        for (tokenIdIndex =0;tokenIdIndex<tokenIdList.length;tokenIdIndex++){
+            if (tokenIdList[tokenIdIndex] == tokenId){
+                break;
+            }
+        }
+        
+        // remove the tokenId according to the tokenIdIndex
+        ownSBTs[from][tokenIdIndex] = ownSBTs[from][tokenIdList.length-1];
+        ownSBTs[from].pop();
     }
 
     /**
@@ -314,7 +298,7 @@ contract CommunitySBT is ERC721URIStorage {
         address from,
         address to,
         uint256 tokenId
-    ) public override(ERC721) SoulBoundTokenTransferModifier {}
+    ) public override(ERC721Upgradeable) SoulBoundTokenTransferModifier {}
 
     /**
      * ban token transfer
@@ -323,7 +307,7 @@ contract CommunitySBT is ERC721URIStorage {
         address from,
         address to,
         uint256 tokenId
-    ) public override(ERC721) SoulBoundTokenTransferModifier {}
+    ) public override(ERC721Upgradeable) SoulBoundTokenTransferModifier {}
 
     /**
      * ban token transfer
@@ -333,6 +317,6 @@ contract CommunitySBT is ERC721URIStorage {
         address to,
         uint256 tokenId,
         bytes memory _data
-    ) public override(ERC721) SoulBoundTokenTransferModifier {}
+    ) public override(ERC721Upgradeable) SoulBoundTokenTransferModifier {}
 
 }
