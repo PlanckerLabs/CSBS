@@ -11,8 +11,9 @@
 ### 9-8
 + [V0.1 prd draft doc](docs/v0.1-draft.md)
 + https://meeting.tencent.com/user-center/shared-record-info?id=e8775f6b-7c4c-468b-8e4d-0eb58b56eb8b&form=-1&click_source_for_middle_login=2
-+ 快速会议
-+ 结论：
-+ 产品@zik回归，一周一次产品设计沟通，@rulin，作为产品助手加入，设计@Dane加入（瓦猫SBT设计者）
-+ 9月底完成代码并发放测试，10月中之前完成发放，10月底之前启动0.2
-+ @amagi需要看下视频和文档，和@eason一起写作开发
+```
+快速会议结论：
+产品@zik回归，一周一次产品设计沟通，@rulin，作为产品助手加入，设计@Dane加入（瓦猫SBT设计者）
+9月底完成代码并发放测试，10月中之前完成发放，10月底之前启动0.2
+@amagi需要看下视频和文档，和@eason一起写作开发
+```
