@@ -1,9 +1,35 @@
 import './create.css'
 import Image from '../../assets/Image.png'
-const Create = () => {
+import React from "react";
+import * as XLSX from 'xlsx'
 
-  return (
-    <div className='create section__padding'>
+export class Create extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    }
+    handleChange(e) {
+      const files = e.target.files[0];
+      let reader = new FileReader()
+      reader.readAsBinaryString(files)
+      reader.onload = function (event) {
+        try {
+            let result = event.target.result
+            let xlsxdata = XLSX.read(result, { type: 'binary' })
+            console.log(xlsxdata)
+            for (let n in xlsxdata.Sheets) {
+                let col = XLSX.utils.sheet_to_json(xlsxdata.Sheets[n], { header: 1, defval: '', blankrows: false })
+                console.log(col)
+            }
+        } catch (err) {
+
+        }
+    }
+  }
+  
+  render() {
+    return (
+          <div className='create section__padding'>
       <div className="create-container">
         <h1>Create community</h1>
         <p className='upload-file'>Upload File</p>
@@ -16,7 +42,7 @@ const Create = () => {
           
           <div className="formGroup">
             <label>Upload</label>
-            <input type="file" className='custom-file-input'
+            <input type="file" className='custom-file-input' onChange={this.handleChange}
           />
           </div>
           <div className="formGroup">
@@ -59,8 +85,9 @@ const Create = () => {
         </form>
       </div>
     </div>
-   
-  )
-};
+    );
+  }
+}
+
 
 export default Create;

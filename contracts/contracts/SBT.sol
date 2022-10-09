@@ -1210,6 +1210,7 @@ abstract contract Ownable is Context {
 }
 
 contract SBT is ERC721, Ownable {
+
     uint eventId;
     struct sbtData {
         address communityOwner;
@@ -1232,7 +1233,7 @@ contract SBT is ERC721, Ownable {
     // mapping(address => issuerData) public addrIssuer;
     constructor() ERC721("DaliWeb3SummerFestSBT", "DWSFSBT") {
 
-    }
+    
 
     function addEvent(
         address communitySigner,
