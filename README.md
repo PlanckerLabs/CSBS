@@ -8,6 +8,9 @@
 + 初稿产品思路：
 https://www.notion.so/greenpillcn/Community-SBT-Basket-and-Seal-2651bd5d756e43eeac3f5ff702b5d467
 + For Dalifunia：https://github.com/PlanckerLabs/CSBS/blob/main/docs/Dalifunia-Web3-Conference-SBT.md
++ More docs: https://github.com/PlanckerLabs/CSBS/blob/main/docs/Dalifunia-Web3-Conference-SBT.md
++ More docs2: https://github.com/PlanckerLabs/CSBS/blob/main/docs/design.md
++ V0.1:https://github.com/PlanckerLabs/CSBS/blob/main/docs/v0.1-draft.md
 
 + 本产品会捐赠社区版给Greenpill社区使用，也欢迎任何社区、DAO使用社区版。
 
