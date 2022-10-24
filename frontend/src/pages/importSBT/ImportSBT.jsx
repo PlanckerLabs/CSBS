@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './importsbt.css'
 import templayout1 from '../../assets/SBT1-basic.png'
 import templayout2 from '../../assets/SBT2-basic.png'
-import { Modal, Sendsbt } from '../../components'
+import { Modal, Sendsbt, ImportExcel } from '../../components'
 const ImportSBT = () => {
   const [Path, setPath] = useState(templayout1)
   const [, updateState] = React.useState();
@@ -35,7 +35,10 @@ const ImportSBT = () => {
     <div className='create section__padding'>
       <div className="create-container">
         <div className="flex flex-row justify-between">
-          <h1>Import SBT</h1>
+          <div className='flex flex-row'>
+            <h1 className='mr-10'>Import SBT</h1>
+            <ImportExcel />
+          </div>
           <Sendsbt />
         </div>
         <div className="flex flex-row">
