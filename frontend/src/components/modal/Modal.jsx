@@ -2,16 +2,23 @@ import React, { useEffect, useRef } from 'react';
 
 const Modal = (props) => {
   const myCanvas = useRef();
-  console.log(props)
   useEffect(() => {
     const context = myCanvas.current.getContext("2d");
     const image = new Image();
 
     image.onload = () => {
       context.drawImage(image, 10, 10, 3840, 3840);
+      if (props["l"] === "SBT1") {
+        context.fillStyle = '#1C98A8';
+      } else if (props["l"] === "SBT2") {
+        context.fillStyle = '#A57949';
+      } else {
+        context.fillStyle = '#FFFFFF';
+      }
       context.font = "700 200px Inter";
       context.textAlign = "center";
       context.fillText(props.item.nickName, 1920, 3520);
+      context.font = "600 150px Inter";
       context.textAlign = "center";
       context.fillText(props.item.roleName, 1920, 3750);
     };
