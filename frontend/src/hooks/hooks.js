@@ -118,18 +118,21 @@ const useSbtIPFS = async (cName, cDescription, imageData, nickName, roleName) =>
 
   console.log(jsonData)
   // 圖片
-  await client.storeBlob(imageData)
+  // await client.storeBlob(imageData)
+  let url;
   // metdata
   try {
     await client
       .store(jsonData)
       .then((metadata) => {
         console.log("metadata saved", metadata);
+        url = metadata.url;
       });
   } catch (error) {
     console.log(error)
     console.log("Could not save NFT to NFT.Storage - Aborted minting");
   }
+  return url;
 };
 
 export { useSave2IPFS, useMergeSvg, useSbtIPFS };
