@@ -1,0 +1,180 @@
+<!--
+ * @Description: 
+ * @Version: 1.0
+ * @Autor: z.cejay@gmail.com
+ * @Date: 2022-09-25 19:08:42
+ * @LastEditors: cejay
+ * @LastEditTime: 2022-09-25 21:11:04
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>svg demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.0/jscolor.min.js"
+        integrity="sha512-AxFF0E7bzQ2LC3PphmgX3rXWuHPXrz4SfKbs9RWB6scn1owDWHbY61lRpSL/f5fu5kwxlDEXfE2uy6oiAsq+UA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    upload raw svg file:
+    <input type="file" id="file" name="file" accept="image/svg+xml" />
+    <br />
+    demo text:
+    <input type="text" id="text" name="text" value="这是一个文本示例，你可以自己改" />
+    <br />
+    text color:
+    <input id="color" name="color" value="#FF0000F5" data-jscolor="{}">
+    <br />
+    font size:
+    <input type="number" id="size" name="size" value="20" />px
+    <br />
+    font family:
+    <input type="text" id="family" name="family" value="'Courier New', monospace" />
+    <br />
+    text-anchor:
+    <select id="anchor" name="anchor">
+        <option value="start">start</option>
+        <option value="middle" selected>middle</option>
+        <option value="end">end</option>
+    </select>
+    <br />
+    dominant-baseline:
+    <select id="baseline" name="baseline">
+        <option value="auto">auto</option>
+        <option value="alphabetic">alphabetic</option>
+        <option value="hanging">hanging</option>
+        <option value="ideographic">ideographic</option>
+        <option value="mathematical">mathematical</option>
+        <option value="middle" selected>middle</option>
+        <option value="central">central</option>
+        <option value="text-after-edge">text-after-edge</option>
+        <option value="text-before-edge">text-before-edge</option>
+    </select>
+    <br />
+    x:
+    <input type="number" id="x" name="x" value="10" />
+    &nbsp;
+    y:
+    <input type="number" id="y" name="y" value="20" />
+    <br />
+    transform:
+    <input type="text" id="transform" name="transform" value="translate(260 295)" />
+    <br />
+    <hr />
+    <div id="svg"></div>
+    <script>
+        let raw_svg = null;
+        let fillcolor = '#FF0000F5';
+        let size = '20px';
+        let family = "'Courier New', monospace";
+        let text = '这是一个文本示例，你可以自己改';
+        let text_anchor = 'middle';
+        let dominant_baseline = 'middle';
+        let x = '10';
+        let y = '20';
+        let transform = 'translate(260 295)';
+
+
+        function addTxt2Svg(raw_svg, txt, fill, size, family, text_anchor, dominant_baseline, transform, x, y) {
+            if (!raw_svg) {
+                return;
+            }
+            let svg = raw_svg;
+            let parser = new DOMParser();
+            let xmlDoc = parser.parseFromString(svg, "text/xml");
+            let root = xmlDoc.documentElement;
+            // check if root node is <svg>
+            if (root.nodeName !== 'svg') {
+                alert('not a svg file');
+                return;
+            }
+            let text = xmlDoc.createElement('text');
+            //text.setAttribute('class', 'xxx'); 
+            //let tspan = xmlDoc.createElement('tspan');
+            //tspan.setAttribute('class', 'xxx');
+            text.setAttribute('text-anchor', text_anchor);
+            text.setAttribute('dominant-baseline', dominant_baseline);
+            if (x) {
+                text.setAttribute('x', x);
+            }
+            if (y) {
+                text.setAttribute('y', y);
+            }
+            if (transform) {
+                text.setAttribute('transform', transform);
+            }
+            text.setAttribute('fill', fill);
+            text.setAttribute('font-size', size);
+            text.setAttribute('font-family', family);
+
+            text.innerHTML = txt;
+            //text.appendChild(tspan);
+            root.appendChild(text);
+
+            let serializer = new XMLSerializer();
+            svg = serializer.serializeToString(xmlDoc);
+            return svg;
+        }
+
+        function buildSvg() {
+            const svg = addTxt2Svg(raw_svg, text, fillcolor, size, family, text_anchor, dominant_baseline, transform, x, y);
+            document.getElementById('svg').innerHTML = svg;
+        }
+
+        document.getElementById('file').addEventListener('change', function (e) {
+            var file = e.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var svg = e.target.result;
+                raw_svg = svg;
+                buildSvg();
+            }
+            reader.readAsText(file);
+        });
+        document.getElementById('color').addEventListener('change', function (e) {
+            fillcolor = e.target.value;
+            buildSvg();
+        });
+        document.getElementById('size').addEventListener('change', function (e) {
+            size = e.target.value + 'px';
+            buildSvg();
+        });
+        document.getElementById('family').addEventListener('change', function (e) {
+            family = e.target.value;
+            buildSvg();
+        });
+        document.getElementById('text').addEventListener('change', function (e) {
+            text = e.target.value;
+            buildSvg();
+        });
+        document.getElementById('anchor').addEventListener('change', function (e) {
+            text_anchor = e.target.value;
+            buildSvg();
+        });
+        document.getElementById('baseline').addEventListener('change', function (e) {
+            dominant_baseline = e.target.value;
+            buildSvg();
+        });
+        document.getElementById('x').addEventListener('change', function (e) {
+            x = e.target.value;
+            buildSvg();
+        });
+        document.getElementById('y').addEventListener('change', function (e) {
+            y = e.target.value;
+            buildSvg();
+        });
+        document.getElementById('transform').addEventListener('change', function (e) {
+            transform = e.target.value;
+            buildSvg();
+        });
+
+
+
+
+    </script>
+
+</body>
+
+</html>
