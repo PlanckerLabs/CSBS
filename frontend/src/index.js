@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 
 ReactDOM.render(
-  <ThirdwebProvider desiredChainId={ChainId.Mainnet}>
+  <ThirdwebProvider desiredChainId={ChainId.Mumbai}>
     <BrowserRouter>
       <App />
     </BrowserRouter>

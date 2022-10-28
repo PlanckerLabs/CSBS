@@ -15,12 +15,12 @@ const ImportSBT = () => {
   };
   let SendData = [{
     id: 1,
-    address: "0x871608cBA092105b91e91295A1d79fFC539BFb48",
+    address: "0xEbCa532F2933Ce328E3Db97EbDa99b47f09635a6",
     nickName: "Survivor",
     roleName: "DeSoc营地分享人"
   }, {
     id: 2,
-    address: "0x871608cBA092105b91e91295A1d79fFC539BFb48",
+    address: "0xa1fe7CA38462b3567D4f915eF7c1b56938c251A4",
     nickName: "Rory",
     roleName: "新人分享者"
   }];
@@ -41,7 +41,7 @@ const ImportSBT = () => {
             <h1 className='mr-10'>Import SBT</h1>
             <ImportExcel />
           </div>
-          <Sendsbt />
+          <Sendsbt data={SendData} img={Path} l={Layout} />
         </div>
         <div className="flex flex-row">
           <div className="flex flex-col flex-initial w-4/12">
