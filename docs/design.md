@@ -44,3 +44,12 @@
 + 每个社区可以制定自己的积分规则，积分的粒度，如果有自定义标准，建议以文字说明，并提供不可变文档url到SBT。
 + 官方鼓励使用PH方式：以2.5年P6工作能力为基准的对应岗位工作效率衡量积分，1积分等于1小时。
 + ![craft](craft1.png)
+
+#### 协议Talk
+4973：不可转移，因为是账户绑定，所以可以随时解绑，give+take（drop+claim）
+5114: sbt徽章，绑定在NFT上，不可转移（sbt？还是NFT？），不可销毁，tokenUri可自定义
+5192: 721增加了一个locked，这个。。。够简洁
+CSBS：overide721的transfer，不可转移，drop+claim（give+take），存储于contractwallet，存储后不可转移，私钥丢失可soucial recovery，会有有reputation（seal机制）+quantity（积分体系），这两个可选；有可自定义的taokeUrl+metadata json新增字段；SBT可销毁、取消（revoke），看发行的关联内容（看是关系还是客观记录）
+
+## V0.1 draft design
++ [v0.1-draft](v0.1-draft.md)
