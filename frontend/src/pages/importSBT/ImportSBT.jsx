@@ -17,17 +17,6 @@ const ImportSBT = () => {
     CommunityName: "",
     CommunityUrl: "",
   };
-  // let SendData = [{
-  //   id: 1,
-  //   address: "0xEbCa532F2933Ce328E3Db97EbDa99b47f09635a6",
-  //   nickName: "Survivor",
-  //   roleName: "DeSoc营地分享人"
-  // }, {
-  //   id: 2,
-  //   address: "0xa1fe7CA38462b3567D4f915eF7c1b56938c251A4",
-  //   nickName: "Rory",
-  //   roleName: "新人分享者"
-  // }];
 
   const onImportExcel = (files) => {
     // 獲取上傳的文件對象
