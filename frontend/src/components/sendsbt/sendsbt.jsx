@@ -1,12 +1,15 @@
-import React, { useEffect, useRef } from 'react';
-import { useContract, useContractRead, useContractWrite } from '@thirdweb-dev/react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useContract, useContractRead, useContractWrite, useChainId } from '@thirdweb-dev/react';
 import CommunitySBTABI from '../../abi/CommunitySBT.json';
 import { useSbtIPFS } from '../../hooks/hooks'
+
+
 const Sendsbt = (props) => {
   let cName = "CSBS";
   let cDescription = "CSBS description";
   const myCanvas = useRef();
-
+  const [MssageData, setMssageData] = useState('')
+  const chainId = useChainId();
   const { contract, isLoading, error } = useContract("0x3CA7dCA365D135e51210EFFE70b158cCd82d3deF", CommunitySBTABI);
   const {
     mutate: sedsbt,
@@ -22,14 +25,13 @@ const Sendsbt = (props) => {
 
   const SBTexist = async (address, tokenId) => {
     try {
-      console.log('ddd')
       const exist = await contract.call("ownSBTs", address, tokenId)
       console.log('exist', exist)
       exist.toString();
       return 0;
     } catch (error) {
       console.log(error)
-      return 1
+      return 1;
     }
   }
   function addImageProcess(src, item) {
@@ -60,27 +62,39 @@ const Sendsbt = (props) => {
   const SendSBT = async () => {
     let address = [];
     let metadata = [];
+    try {
+      if (chainId === 80001) {
+        setMssageData('發放開始...')
+        for (let index = 0; index < props.data.length; index++) {
 
-    for (let index = 0; index < props.data.length; index++) {
-
-      const list = props.data[index];
-      let exists = await SBTexist(list.address, 2);
-      if (exists) {
-        console.log('in')
-        let imageData = await CreateImageBob(list)
-        let blob = dataURItoBlob(imageData)
-        let file = new File([blob], "image.png", { type: 'image/png' });
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        let url = await useSbtIPFS(cName, cDescription, file, list.nickName, list.roleName);
-        address.push(list.address)
-        metadata.push(url)
+          const list = props.data[index];
+          //console.log('list.walletAddress', list.walletAddress)
+          let exists = await SBTexist(list.walletAddress, 2);
+          if (exists) {
+            console.log('in')
+            let imageData = await CreateImageBob(list)
+            let blob = dataURItoBlob(imageData)
+            let file = new File([blob], "image.png", { type: 'image/png' });
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            let url = await useSbtIPFS(cName, cDescription, file, list.nickName, list.roleName);
+            metadata.push(url)
+            address.push(list.walletAddress)
+          }
+          setMssageData(`IPFS UPLOAD .... ${list.walletAddress}`)
+        }
+        setMssageData(`Send SBT...`);
+        await sedsbt([2, address, metadata]);
+        if (isSBTWithLoging) {
+          setMssageData('發放完畢...')
+          console.log('上傳完畢')
+        }
+      } else {
+        setMssageData('請先切換 Mumbai NetWork!!')
       }
+    } catch (error) {
+      console.log(error)
     }
 
-    await sedsbt([2, address, metadata]);
-    if (isSBTWithLoging) {
-      console.log('上傳完畢')
-    }
   }
   function dataURItoBlob(dataURI) {
     // convert base64/URLEncoded data component to raw binary data held in a string
@@ -117,6 +131,7 @@ const Sendsbt = (props) => {
           <label htmlFor="my-modal-g" className="absolute btn btn-sm btn-circle right-2 top-2">✕</label>
           <h3 className="text-lg font-bold">準備</h3>
           <p className="py-4">點下確認開始～～發送</p>
+          <h3>{MssageData}</h3>
           <button onClick={SendSBT} class="btn btn-info">確定</button>
           <canvas ref={myCanvas} width={3840} height={3840} style={{ display: 'none' }} />
         </div>
