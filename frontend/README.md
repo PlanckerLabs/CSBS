@@ -7,7 +7,7 @@
 
 ``` bash
 # select nvm
-$ nvm use v16.13.0
+$ nvm use v17.3.1
 
 # install dependencies
 $ yarn install
