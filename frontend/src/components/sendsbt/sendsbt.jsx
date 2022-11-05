@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useContract, useContractRead, useContractWrite, useChainId } from '@thirdweb-dev/react';
+import { useContract, useContractRead, useContractWrite, useChainId, useAccount } from '@thirdweb-dev/react';
 import CommunitySBTABI from '../../abi/CommunitySBT.json';
 import { useSbtIPFS } from '../../hooks/hooks'
 
@@ -10,11 +10,13 @@ const Sendsbt = (props) => {
   const myCanvas = useRef();
   const [MssageData, setMssageData] = useState('')
   const chainId = useChainId();
+  const Account = useAccount();
   const { contract, isLoading, error } = useContract("0x3CA7dCA365D135e51210EFFE70b158cCd82d3deF", CommunitySBTABI);
   const {
     mutate: sedsbt,
     isLoading: isSBTWithLoging,
-    error: isSBTWithError,
+    isError: isSBTWithError,
+    isSuccess: isSBTWithSuccess
   } = useContractWrite(contract, "issueBatchSBTWithEvent");
 
 
@@ -33,6 +35,21 @@ const Sendsbt = (props) => {
       console.log(error)
       return 1;
     }
+  }
+  const checkSigner = async () => {
+    try {
+      const result = await contract.call("communityEventMap", 2)
+      console.log(Account, result.communitySigner)
+      if (Account[0].data.address === result.communitySigner) {
+        return 1;
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      console.log(error)
+      return 0;
+    }
+
   }
   function addImageProcess(src, item) {
     return new Promise((resolve, reject) => {
@@ -62,34 +79,43 @@ const Sendsbt = (props) => {
   const SendSBT = async () => {
     let address = [];
     let metadata = [];
+
     try {
       if (chainId === 80001) {
-        setMssageData('發放開始...')
-        for (let index = 0; index < props.data.length; index++) {
+        let singer = await checkSigner()
+        if (singer) {
+          setMssageData('Start Send ...')
+          for (let index = 0; index < props.data.length; index++) {
 
-          const list = props.data[index];
-          //console.log('list.walletAddress', list.walletAddress)
-          let exists = await SBTexist(list.walletAddress, 2);
-          if (exists) {
-            console.log('in')
-            let imageData = await CreateImageBob(list)
-            let blob = dataURItoBlob(imageData)
-            let file = new File([blob], "image.png", { type: 'image/png' });
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            let url = await useSbtIPFS(cName, cDescription, file, list.nickName, list.roleName);
-            metadata.push(url)
-            address.push(list.walletAddress)
+            const list = props.data[index];
+            //console.log('list.walletAddress', list.walletAddress)
+            let exists = await SBTexist(list.walletAddress, 2);
+            if (exists) {
+              console.log('in')
+              let imageData = await CreateImageBob(list)
+              let blob = dataURItoBlob(imageData)
+              let file = new File([blob], "image.png", { type: 'image/png' });
+              // eslint-disable-next-line react-hooks/rules-of-hooks
+              let url = await useSbtIPFS(cName, cDescription, file, list.nickName, list.roleName);
+              metadata.push(url)
+              address.push(list.walletAddress)
+            }
+            setMssageData(`IPFS UPLOAD .... ${list.walletAddress}`)
           }
-          setMssageData(`IPFS UPLOAD .... ${list.walletAddress}`)
-        }
-        setMssageData(`Send SBT...`);
-        await sedsbt([2, address, metadata]);
-        if (isSBTWithLoging) {
-          setMssageData('發放完畢...')
-          console.log('上傳完畢')
+          setMssageData(`Send SBT...`);
+          await sedsbt([2, address, metadata]);
+          if (isSBTWithSuccess) {
+            setMssageData('Success...')
+            console.log('上傳完畢')
+          }
+          if (isSBTWithError) {
+            setMssageData('error....')
+          }
+        } else {
+          setMssageData('not communitySigner!!')
         }
       } else {
-        setMssageData('請先切換 Mumbai NetWork!!')
+        setMssageData('Switch Mumbai NetWork!!')
       }
     } catch (error) {
       console.log(error)
