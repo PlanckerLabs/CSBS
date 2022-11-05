@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@openzeppelin/contracts": "^4.7.3",
+    "@openzeppelin/hardhat-upgrades": "^1.21.0",
     "@thirdweb-dev/react": "^3",
     "@thirdweb-dev/sdk": "^3",
     "axios": "^0.25.0",
-    "ethers": "^5.6.8",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.12.2",
     "nft.storage": "^7.0.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -49,8 +53,11 @@
     ]
   },
   "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.1",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
     "assert": "^2.0.0",
     "autoprefixer": "^10.4.8",
+    "chai": "^4.3.6",
     "daisyui": "^2.20.0",
     "hover-effect": "^1.1.0",
     "postcss": "^8.4.14",
