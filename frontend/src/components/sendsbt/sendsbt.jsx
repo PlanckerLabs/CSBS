@@ -11,7 +11,10 @@ const Sendsbt = (props) => {
   const [MssageData, setMssageData] = useState('')
   const chainId = useChainId();
   const Account = useAccount();
-  const { contract, isLoading, error } = useContract("0x3CA7dCA365D135e51210EFFE70b158cCd82d3deF", CommunitySBTABI);
+  // rory合约: 0x3CA7dCA365D135e51210EFFE70b158cCd82d3deF
+  // jhf合约: 0xe3ee6F3AF21f7010bfE2f72680a9d36cFa871Ad6
+  // jhf 钱包：0xCe80943A1a3763E803622F8E90199cD7c38037Da， 私钥：f99263310141b706c82049e39cd47dafb26fe3df07541ae0c42e1240190e07da
+  const { contract, isLoading, error } = useContract("0xe3ee6F3AF21f7010bfE2f72680a9d36cFa871Ad6", CommunitySBTABI);
   const {
     mutate: sedsbt,
     isLoading: isSBTWithLoging,
@@ -38,7 +41,7 @@ const Sendsbt = (props) => {
   }
   const checkSigner = async () => {
     try {
-      const result = await contract.call("communityEventMap", 2)
+      const result = await contract.call("communityEventMap", 1)
       console.log(Account, result.communitySigner)
       if (Account[0].data.address === result.communitySigner) {
         return 1;

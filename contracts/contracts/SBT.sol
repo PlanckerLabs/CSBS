@@ -1231,9 +1231,7 @@ contract SBT is ERC721, Ownable {
     mapping(uint256 => uint256) public tokenData;
     // 把evenid与owneraddress 链接起来
     // mapping(address => issuerData) public addrIssuer;
-    constructor() ERC721("DaliWeb3SummerFestSBT", "DWSFSBT") {
-
-    
+    constructor() ERC721("DaliWeb3SummerFestSBT", "DWSFSBT") {}
 
     function addEvent(
         address communitySigner,
