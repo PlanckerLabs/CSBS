@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './importsbt.css'
 import templayout1 from '../../assets/SBT1-basic.png'
 import templayout2 from '../../assets/SBT2-basic.png'
+import excelTemplate from '../../assets/template.xlsx'
 import { Modal, Sendsbt, ImportExcel } from '../../components'
 import * as XLSX from 'xlsx'
 import InputFiles from "react-input-files";
@@ -89,9 +90,13 @@ const ImportSBT = () => {
       <div className="w-full create-container">
         <div className="flex flex-row justify-between">
           <div className='flex flex-row'>
-            <h1 className='mr-10'>Import SBT</h1>
+            <h2 className='mr-10'><a href={excelTemplate}>1. Download this Excel Template here!</a></h2><br/>
+            <span className="btn btn-primary"><a href={excelTemplate}>Download</a></span>
+            <br/>
+
+            <h2 >2. Input Your Content in Excel Template &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2><br/>
             <InputFiles accept=".xlsx, .xls" onChange={onImportExcel}>
-              <button className="btn btn-primary">Upload</button>
+             <h2>  3. Upload Your file and Drop</h2> <button className="btn btn-primary">Upload</button>
             </InputFiles>
           </div>
           <Sendsbt data={ExeclData} img={Path} l={Layout} />
