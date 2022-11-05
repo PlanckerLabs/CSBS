@@ -38,7 +38,7 @@ const Footer = () => {
       </div>
       <div className="footer-copyright">
         <div>
-        <p> © {(new Date().getFullYear())} Build by Plancker^, Community. <br/>Sponsored by <a herf="https://twitter.com/CGreenpill">CGreenPill Community</a> All Rights Reserved</p>
+        <p> © {(new Date().getFullYear())} Build by Plancker^, Community. <br/>CSBS All Rights Reserved</p>
         </div>
         <div>
           <a href='https://twitter.com/PlanckerDao'><AiOutlineInstagram size={25} color='white' className='footer-icon' /></a>
