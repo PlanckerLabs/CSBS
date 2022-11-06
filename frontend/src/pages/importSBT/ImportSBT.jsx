@@ -90,13 +90,13 @@ const ImportSBT = () => {
       <div className="w-full create-container">
         <div className="flex flex-row justify-between">
           <div className='flex flex-row'>
-            <h2 className='mr-10'><a href={excelTemplate}>1. Download this Excel Template here!</a></h2><br/>
-            <span className="btn btn-primary"><a href={excelTemplate}>Download</a></span>
+            <h2 className='mr-10'><a href={excelTemplate}>1. Down Excel Template and Input your Content</a>
+            <br /><span className="btn btn-primary"><a href={excelTemplate}>Download</a></span>
+            </h2><br/>
+            
             <br/>
-
-            <h2 >2. Input Your Content in Excel Template &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2><br/>
             <InputFiles accept=".xlsx, .xls" onChange={onImportExcel}>
-             <h2>  3. Upload Your file and Drop</h2> <button className="btn btn-primary">Upload</button>
+             <h2>  2. Upload Your file and Drop</h2> <button className="btn btn-primary">Upload</button>
             </InputFiles>
           </div>
           <Sendsbt data={ExeclData} img={Path} l={Layout} />

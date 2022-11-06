@@ -158,7 +158,8 @@ const Sendsbt = (props) => {
     // 開始上傳 SBT IPFS
     // 互叫智能合約
     <div>
-      <label htmlFor="my-modal-g" className="btn btn-active btn-primary">Drop</label>
+      <h2>  3. Batch drop SBT to Destination addresses</h2>
+      <label htmlFor="my-modal-g" className="btn btn-active btn-primary">Publish</label>
       <input type="checkbox" id="my-modal-g" className="modal-toggle" />
       <div className="modal">
         <div className="relative modal-box">
