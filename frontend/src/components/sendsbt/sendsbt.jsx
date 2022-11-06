@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useContract, useContractRead, useContractWrite, useChainId, useAccount } from '@thirdweb-dev/react';
+import { ethers } from 'ethers'
 import CommunitySBTABI from '../../abi/CommunitySBT.json';
 import { useSbtIPFS } from '../../hooks/hooks'
 
@@ -11,16 +12,15 @@ const Sendsbt = (props) => {
   const [MssageData, setMssageData] = useState('')
   const chainId = useChainId();
   const Account = useAccount();
+
   // rory合约: 0x3CA7dCA365D135e51210EFFE70b158cCd82d3deF
   // jhf合约: 0xe3ee6F3AF21f7010bfE2f72680a9d36cFa871Ad6
   // jhf 钱包：0xCe80943A1a3763E803622F8E90199cD7c38037Da， 私钥：f99263310141b706c82049e39cd47dafb26fe3df07541ae0c42e1240190e07da
-  const { contract, isLoading, error } = useContract("0xe3ee6F3AF21f7010bfE2f72680a9d36cFa871Ad6", CommunitySBTABI);
+  const { contract } = useContract("0x3CA7dCA365D135e51210EFFE70b158cCd82d3deF", CommunitySBTABI);
   const {
-    mutate: sedsbt,
-    isLoading: isSBTWithLoging,
-    isError: isSBTWithError,
-    isSuccess: isSBTWithSuccess
+    mutateAsync: sedsbt,
   } = useContractWrite(contract, "issueBatchSBTWithEvent");
+
 
 
   const CreateImageBob = async (item) => {
@@ -30,10 +30,10 @@ const Sendsbt = (props) => {
 
   const SBTexist = async (address, tokenId) => {
     try {
-      const exist = await contract.call("ownSBTs", address, tokenId)
-      console.log('exist', exist)
-      exist.toString();
-      return 0;
+      //console.log(ethers.utils)
+      //console.log('aa', ethers.utils.solidityKeccak256(['address', 'uint256'], [address, tokenId]))
+      const exist = await contract.call("addressAwardedMap", ethers.utils.solidityKeccak256(['address', 'uint256'], [address, tokenId]))
+      return exist;
     } catch (error) {
       console.log(error)
       return 1;
@@ -42,7 +42,7 @@ const Sendsbt = (props) => {
   const checkSigner = async () => {
     try {
       const result = await contract.call("communityEventMap", 1)
-      console.log(Account, result.communitySigner)
+      //console.log(Account, result.communitySigner)
       if (Account[0].data.address === result.communitySigner) {
         return 1;
       } else {
@@ -91,9 +91,9 @@ const Sendsbt = (props) => {
           for (let index = 0; index < props.data.length; index++) {
 
             const list = props.data[index];
-            //console.log('list.walletAddress', list.walletAddress)
-            let exists = await SBTexist(list.walletAddress, 2);
-            if (exists) {
+            let exists = await SBTexist(list.walletAddress, 1);
+            setMssageData(`IPFS UPLOAD .... ${list.walletAddress}`)
+            if (!exists) {
               console.log('in')
               let imageData = await CreateImageBob(list)
               let blob = dataURItoBlob(imageData)
@@ -103,17 +103,21 @@ const Sendsbt = (props) => {
               metadata.push(url)
               address.push(list.walletAddress)
             }
-            setMssageData(`IPFS UPLOAD .... ${list.walletAddress}`)
           }
           setMssageData(`Send SBT...`);
-          await sedsbt([2, address, metadata]);
-          if (isSBTWithSuccess) {
-            setMssageData('Success...')
-            console.log('上傳完畢')
+          if (metadata.length > 0) {
+            let Sentresult = await sedsbt([1, address, metadata]);
+            console.log('rrrr', Sentresult)
+            if (Sentresult.receipt.status === 1) {
+              setMssageData('Success...')
+              console.log('上傳完畢')
+            } else {
+              setMssageData('error....')
+            }
+          } else {
+            setMssageData('Over...')
           }
-          if (isSBTWithError) {
-            setMssageData('error....')
-          }
+
         } else {
           setMssageData('not communitySigner!!')
         }
@@ -121,6 +125,7 @@ const Sendsbt = (props) => {
         setMssageData('Switch Mumbai NetWork!!')
       }
     } catch (error) {
+      setMssageData('error....')
       console.log(error)
     }
 
