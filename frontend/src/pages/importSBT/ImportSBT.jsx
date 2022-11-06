@@ -96,7 +96,7 @@ const ImportSBT = () => {
             
             <br/>
             <InputFiles accept=".xlsx, .xls" onChange={onImportExcel}>
-             <h2>  2. Upload Your file and Drop</h2> <button className="btn btn-primary">Upload</button>
+             <h2>2. Upload Your file and get record</h2> <button className="btn btn-primary">Upload</button>
             </InputFiles>
           </div>
           <Sendsbt data={ExeclData} img={Path} l={Layout} />
