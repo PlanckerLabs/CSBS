@@ -158,15 +158,16 @@ const Sendsbt = (props) => {
     // 開始上傳 SBT IPFS
     // 互叫智能合約
     <div>
+      <h2>  3. Batch drop SBT to Destination addresses</h2>
       <label htmlFor="my-modal-g" className="btn btn-active btn-primary">Drop</label>
       <input type="checkbox" id="my-modal-g" className="modal-toggle" />
       <div className="modal">
         <div className="relative modal-box">
           <label htmlFor="my-modal-g" className="absolute btn btn-sm btn-circle right-2 top-2">✕</label>
-          <h3 className="text-lg font-bold">準備</h3>
-          <p className="py-4">點下確認開始～～發送</p>
+          <h3 className="text-lg font-bold">Ready?</h3>
+          <p className="py-4">Confirm and ～～Launch!</p>
           <h3>{MssageData}</h3>
-          <button onClick={SendSBT} class="btn btn-info">確定</button>
+          <button onClick={SendSBT} class="btn btn-info">Confirm</button>
           <canvas ref={myCanvas} width={3840} height={3840} style={{ display: 'none' }} />
         </div>
       </div>

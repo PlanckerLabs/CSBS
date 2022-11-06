@@ -7,10 +7,10 @@ import { useAddress, useMetamask, useDisconnect, ConnectWallet } from "@thirdweb
 
 const Menu = () => (
   <>
-    <Link to="/create"><p>create community </p> </Link>
-    <Link to="/createEvent"><p>create event </p> </Link>
-    <Link to="/importSBT"><p>ImportSBT</p> </Link>
-    <Link to="/eventProfile/Rian"><p>My SBT</p></Link>
+    {/* <Link to="/create"><p>create community </p> </Link> */}
+    {/* <Link to="/createEvent"><p>create event </p> </Link> */}
+    <Link to="/importSBT"><p>Drop SBT</p> </Link>
+    <Link to="/eventProfile/Rian"><p>My</p></Link>
 
   </>
 )

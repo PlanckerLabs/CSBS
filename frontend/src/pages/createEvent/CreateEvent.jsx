@@ -16,7 +16,7 @@ const CreateEvent = () => {
           
           <div className="formGroup">
             <label>Upload</label>
-            <input type="file" className='custom-file-input' onClick={this.exportFile}
+            <input type="file" className='custom-file-input'
           />
           </div>
           <div className="formGroup">
