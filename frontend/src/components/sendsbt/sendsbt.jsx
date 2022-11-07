@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useContract, useContractRead, useContractWrite, useChainId, useAccount } from '@thirdweb-dev/react';
-import { ethers } from 'ethers'
+import { ethers } from 'ethers';
 import CommunitySBTABI from '../../abi/CommunitySBT.json';
-import { useSbtIPFS } from '../../hooks/hooks'
+import { useSbtIPFS } from '../../hooks/hooks';
 
+const myContract = process.env.CONTRACT_ADDR;
 
 const Sendsbt = (props) => {
   let cName = "CSBS";
@@ -14,9 +15,8 @@ const Sendsbt = (props) => {
   const Account = useAccount();
 
   // rory合约: 0x3CA7dCA365D135e51210EFFE70b158cCd82d3deF
-  // jhf合约: 0xe3ee6F3AF21f7010bfE2f72680a9d36cFa871Ad6
-  // jhf 钱包：0xCe80943A1a3763E803622F8E90199cD7c38037Da， 私钥：f99263310141b706c82049e39cd47dafb26fe3df07541ae0c42e1240190e07da
-  const { contract } = useContract("0x3CA7dCA365D135e51210EFFE70b158cCd82d3deF", CommunitySBTABI);
+  const { contract } = useContract(process.env.REACT_APP_JHF_CONTRACT_ADDR, CommunitySBTABI);
+  // const { contract } = useContract("0xe3ee6F3AF21f7010bfE2f72680a9d36cFa871Ad6", CommunitySBTABI);
   const {
     mutateAsync: sedsbt,
   } = useContractWrite(contract, "issueBatchSBTWithEvent");
@@ -167,7 +167,7 @@ const Sendsbt = (props) => {
           <h3 className="text-lg font-bold">Ready?</h3>
           <p className="py-4">Confirm and ～～Launch!</p>
           <h3>{MssageData}</h3>
-          <button onClick={SendSBT} class="btn btn-info">Confirm</button>
+          <button onClick={SendSBT} className="btn btn-info">Confirm</button>
           <canvas ref={myCanvas} width={3840} height={3840} style={{ display: 'none' }} />
         </div>
       </div>
