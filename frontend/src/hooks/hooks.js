@@ -1,6 +1,6 @@
 /* Create the IPFS CID of the json data */
-import { NFTStorage } from "nft.storage";
-
+//import { NFTStorage } from "nft.storage";
+import { NFTStorage } from 'https://cdn.jsdelivr.net/npm/nft.storage/dist/bundle.esm.min.js'
 
 const client = new NFTStorage({
   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDkxNjhiZDExQ2MxODIxNWM2NTNmZUQ1QjYzZjhiMTg0NDAxOTA4YjMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY2NzY1MTI1ODQ3NiwibmFtZSI6ImFraXJhIn0.DvHGGXozXPzpx-i_Q6BpWWYsf5-nOgNcpFPSSwRucv8"
