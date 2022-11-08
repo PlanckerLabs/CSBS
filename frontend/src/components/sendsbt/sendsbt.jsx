@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useContract, useContractRead, useContractWrite, useChainId, useAccount } from '@thirdweb-dev/react';
+import { useContract, useContractWrite, useChainId, useAccount } from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
 import CommunitySBTABI from '../../abi/CommunitySBT.json';
 import { useSbtIPFS } from '../../hooks/hooks';
 
-const myContract = process.env.CONTRACT_ADDR;
+//const myContract = process.env.CONTRACT_ADDR;
 
 const Sendsbt = (props) => {
   let cName = "CSBS";
