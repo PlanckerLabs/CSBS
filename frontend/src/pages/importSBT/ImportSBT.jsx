@@ -11,7 +11,6 @@ const ImportSBT = () => {
   const [Path, setPath] = useState(templayout1)
   const [Layout, setLayout] = useState("SBT1")
   const [ExeclData, setExeclData] = useState([])
-  const [, updateState] = React.useState();
   //const forceUpdate = React.useCallback(() => updateState({}), []);
   // let CommounityData = {
   //   CommunityLogo: "",
@@ -123,7 +122,7 @@ const ImportSBT = () => {
                       {
                         ExeclData.map(
                           (list) =>
-                            <tr className='hover'>
+                            <tr className='hover' key={list.id}>
                               <td>{list.walletAddress}</td>
                               <td>{list.nickName}</td>
                               <td>{list.roleName}</td>
