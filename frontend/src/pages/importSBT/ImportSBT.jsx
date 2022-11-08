@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import './importsbt.css'
 import templayout1 from '../../assets/SBT1-basic.png'
 import templayout2 from '../../assets/SBT2-basic.png'
 import excelTemplate from '../../assets/template.xlsx'
-import { Modal, Sendsbt, ImportExcel } from '../../components'
+import { Modal, Sendsbt } from '../../components'
 import * as XLSX from 'xlsx'
 import InputFiles from "react-input-files";
 
@@ -11,13 +11,12 @@ const ImportSBT = () => {
   const [Path, setPath] = useState(templayout1)
   const [Layout, setLayout] = useState("SBT1")
   const [ExeclData, setExeclData] = useState([])
-  const [, updateState] = React.useState();
-  const forceUpdate = React.useCallback(() => updateState({}), []);
-  let CommounityData = {
-    CommunityLogo: "",
-    CommunityName: "",
-    CommunityUrl: "",
-  };
+  //const forceUpdate = React.useCallback(() => updateState({}), []);
+  // let CommounityData = {
+  //   CommunityLogo: "",
+  //   CommunityName: "",
+  //   CommunityUrl: "",
+  // };
 
   const onImportExcel = (files) => {
     // 獲取上傳的文件對象
@@ -91,12 +90,12 @@ const ImportSBT = () => {
         <div className="flex flex-row justify-between">
           <div className='flex flex-row'>
             <h2 className='mr-10'><a href={excelTemplate}>1. Down Excel Template and Input your Content</a>
-            <br /><span className="btn btn-primary"><a href={excelTemplate}>Download</a></span>
-            </h2><br/>
-            
-            <br/>
+              <br /><span className="btn btn-primary"><a href={excelTemplate}>Download</a></span>
+            </h2><br />
+
+            <br />
             <InputFiles accept=".xlsx, .xls" onChange={onImportExcel}>
-             <h2>2. Upload Your file and get record</h2> <button className="btn btn-primary">Upload</button>
+              <h2>2. Upload Your file and get record</h2> <button className="btn btn-primary">Upload</button>
             </InputFiles>
           </div>
           <Sendsbt data={ExeclData} img={Path} l={Layout} />
@@ -123,7 +122,7 @@ const ImportSBT = () => {
                       {
                         ExeclData.map(
                           (list) =>
-                            <tr className='hover'>
+                            <tr className='hover' key={list.id}>
                               <td>{list.walletAddress}</td>
                               <td>{list.nickName}</td>
                               <td>{list.roleName}</td>

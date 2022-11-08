@@ -17,15 +17,15 @@ const Menu = () => (
 
 const Navbar = () => {
   const address = useAddress();
-  const connectWithMetamask = useMetamask();
-  const disconnect = useDisconnect();
+  //const connectWithMetamask = useMetamask();
+  //const disconnect = useDisconnect();
 
   const [toggleMenu, setToggleMenu] = useState(false)
   const [user, setUser] = useState(false)
 
-  const handleLogout = () => {
-    setUser(false);
-  }
+  // const handleLogout = () => {
+  //   setUser(false);
+  // }
   const handleLogin = () => {
     setUser(true);
   }
