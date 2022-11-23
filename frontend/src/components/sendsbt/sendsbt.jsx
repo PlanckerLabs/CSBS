@@ -16,6 +16,7 @@ const Sendsbt = (props) => {
 
   // rory合约: 0x3CA7dCA365D135e51210EFFE70b158cCd82d3deF
   const { contract } = useContract(process.env.REACT_APP_JHF_CONTRACT_ADDR, CommunitySBTABI);
+  console.log("contract: ",process.env.REACT_APP_JHF_CONTRACT_ADDR)
   // const { contract } = useContract("0xe3ee6F3AF21f7010bfE2f72680a9d36cFa871Ad6", CommunitySBTABI);
   const {
     mutateAsync: sedsbt,

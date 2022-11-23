@@ -113,7 +113,7 @@ const useSbtIPFS = async (cName, cDescription, imageData, nickName, roleName) =>
       },
       {
         "trait_type": "roleName",
-        "value": roleName
+        "value":  process.env.REACT_APP_COMMU_ACT_NAME + roleName + process.env.REACT_APP_COMMU_ACT_TAIL
       },
     ],
     image: imageData,
