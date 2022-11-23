@@ -9,7 +9,7 @@ const Menu = () => (
   <>
     {/* <Link to="/create"><p>create community </p> </Link> */}
     {/* <Link to="/createEvent"><p>create event </p> </Link> */}
-    <Link to="/importSBT"><p>Drop SBT</p> </Link>
+    <Link to="/importSBT"><p>SBT</p> </Link>
     <Link to="/eventProfile/Rian"><p>My</p></Link>
 
   </>
