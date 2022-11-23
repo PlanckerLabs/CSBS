@@ -27,11 +27,11 @@ const Modal = (props) => {
 
   return (
     <div>
-      <label for={`my-modal-${props.item.id}`} className="btn modal-button">View</label>
+      <label htmlFor={`my-modal-${props.item.id}`} className="btn modal-button">View</label>
       <input type="checkbox" id={`my-modal-${props.item.id}`} className="modal-toggle" />
       <div className="modal">
         <div className="relative modal-box">
-          <label for={`my-modal-${props.item.id}`} className="absolute btn btn-sm btn-circle right-2 top-2">✕</label>
+          <label htmlFor={`my-modal-${props.item.id}`} className="absolute btn btn-sm btn-circle right-2 top-2">✕</label>
           <h3 className="text-lg font-bold">{props.item.nickName}-{props.item.roleName}</h3>
           <div>
             <canvas ref={myCanvas} width={3840} height={3840} style={{ height: '400px' }} />

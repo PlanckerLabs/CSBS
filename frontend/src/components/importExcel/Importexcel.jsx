@@ -8,7 +8,7 @@ const ImportExcel = (props) => {
 
   return (
     <div>
-      <button class="btn btn-info">upload</button>
+      <button className="btn btn-info">upload</button>
     </div>
   )
 }
