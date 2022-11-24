@@ -124,7 +124,7 @@ const ImportSBT = () => {
                           (list) =>
                             <tr className='hover' key={list.id}>
                               <td>{list.walletAddress}</td>
-                              <td>{list.nickName}</td>
+                              <td>{list.nickName.charAt(0).toUpperCase() + list.nickName.slice(1)}</td>
                               <td>{list.roleName}</td>
                               <td>
                                 <Modal item={list} img={Path} l={Layout} />

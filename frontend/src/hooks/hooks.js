@@ -2,8 +2,10 @@
 //import { NFTStorage } from "nft.storage";
 import { NFTStorage } from 'https://cdn.jsdelivr.net/npm/nft.storage/dist/bundle.esm.min.js'
 
+
+
 const client = new NFTStorage({
-  token: process.env.REACT_APP_NFT_API_KEY
+  token: process.env.REACT_APP_NFT_STORAGE_API_KEY
 });
 
 // jhf api key ：eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDkxNjhiZDExQ2MxODIxNWM2NTNmZUQ1QjYzZjhiMTg0NDAxOTA4YjMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY2NzY1MTI1ODQ3NiwibmFtZSI6ImFraXJhIn0.DvHGGXozXPzpx-i_Q6BpWWYsf5-nOgNcpFPSSwRucv8
@@ -109,11 +111,11 @@ const useSbtIPFS = async (cName, cDescription, imageData, nickName, roleName) =>
       },
       {
         "trait_type": "nickName",
-        "value": nickName
+        "value": nickName.charAt(0).toUpperCase() + nickName.slice(1)
       },
       {
         "trait_type": "roleName",
-        "value":  process.env.REACT_APP_COMMU_ACT_NAME + roleName + process.env.REACT_APP_COMMU_ACT_TAIL
+        "value": process.env.REACT_APP_COMMU_ACT_NAME + roleName + process.env.REACT_APP_COMMU_ACT_TAIL
       },
     ],
     image: imageData,

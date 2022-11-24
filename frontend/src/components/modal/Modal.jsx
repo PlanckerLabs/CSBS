@@ -17,10 +17,12 @@ const Modal = (props) => {
       }
       context.font = "700 200px Inter";
       context.textAlign = "center";
-      context.fillText(props.item.nickName, 1920, 3520);
+      let _nickName = props.item.nickName.charAt(0).toUpperCase() + props.item.nickName.slice(1)
+      context.fillText(_nickName, 1920, 3520);
       context.font = "600 150px Inter";
       context.textAlign = "center";
-      context.fillText(props.item.roleName, 1920, 3750);
+      let _roleName = process.env.REACT_APP_COMMU_ACT_NAME + props.item.roleName + process.env.REACT_APP_COMMU_ACT_TAIL
+      context.fillText(_roleName, 1920, 3750);
     };
     image.src = props.img;
   });

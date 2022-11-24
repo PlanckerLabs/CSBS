@@ -16,7 +16,7 @@ const Sendsbt = (props) => {
 
   // rory合约: 0x3CA7dCA365D135e51210EFFE70b158cCd82d3deF
   const { contract } = useContract(process.env.REACT_APP_JHF_CONTRACT_ADDR, CommunitySBTABI);
-  console.log("contract: ",process.env.REACT_APP_JHF_CONTRACT_ADDR)
+  console.log("contract: ", process.env.REACT_APP_JHF_CONTRACT_ADDR)
   // const { contract } = useContract("0xe3ee6F3AF21f7010bfE2f72680a9d36cFa871Ad6", CommunitySBTABI);
   const {
     mutateAsync: sedsbt,
@@ -70,10 +70,12 @@ const Sendsbt = (props) => {
         }
         context.font = "700 200px Inter";
         context.textAlign = "center";
-        context.fillText(item.nickName, 1920, 3520);
+        let _nickName = item.nickName.charAt(0).toUpperCase() + item.nickName.slice(1)
+        context.fillText(_nickName, 1920, 3520);
         context.font = "600 150px Inter";
         context.textAlign = "center";
-        context.fillText(item.roleName, 1920, 3750);
+        let _roleName = process.env.REACT_APP_COMMU_ACT_NAME + item.roleName + process.env.REACT_APP_COMMU_ACT_TAIL
+        context.fillText(_roleName, 1920, 3750);
         resolve(myCanvas.current.toDataURL("image/png"))
       };
       img.src = src
