@@ -107,7 +107,7 @@ const useSbtIPFS = async (cName, cDescription, imageData, nickName, roleName) =>
     attributes: [
       {
         "trait_type": "eventName",
-        "value": "大理活動參加"
+        "value": process.env.REACT_APP_EVT_NAME
       },
       {
         "trait_type": "nickName",

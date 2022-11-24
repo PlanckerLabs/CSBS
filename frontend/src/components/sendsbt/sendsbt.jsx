@@ -7,8 +7,8 @@ import { useSbtIPFS } from '../../hooks/hooks';
 //const myContract = process.env.CONTRACT_ADDR;
 
 const Sendsbt = (props) => {
-  let cName = "CSBS";
-  let cDescription = "CSBS description";
+  let cName = process.env.REACT_APP_COMMU_NAME;
+  let cDescription = process.env.REACT_APP_COMMU_DISC;
   const myCanvas = useRef();
   const [MssageData, setMssageData] = useState('')
   const chainId = useChainId();
