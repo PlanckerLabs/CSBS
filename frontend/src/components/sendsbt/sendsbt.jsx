@@ -10,6 +10,7 @@ const Sendsbt = (props) => {
   let cName = "CSBS";
   let cDescription = "CSBS description";
   const myCanvas = useRef();
+  const [modal, setModal] = useState('modal')
   const [MssageData, setMssageData] = useState('')
   const chainId = useChainId();
   const Account = useAccount();
@@ -85,7 +86,6 @@ const Sendsbt = (props) => {
   const SendSBT = async () => {
     let address = [];
     let metadata = [];
-
     try {
       if (chainId === 80001) {
         let singer = await checkSigner()
@@ -119,10 +119,13 @@ const Sendsbt = (props) => {
             }
           } else {
             setMssageData('Over...')
+            setModal('modal modal-toggle')
+
           }
 
         } else {
           setMssageData('not communitySigner!!')
+
         }
       } else {
         setMssageData('Switch Mumbai NetWork!!')
@@ -164,7 +167,7 @@ const Sendsbt = (props) => {
       <h2>  3. Batch drop SBT to Destination addresses</h2>
       <label htmlFor="my-modal-g" className="btn btn-active btn-primary">Drop</label>
       <input type="checkbox" id="my-modal-g" className="modal-toggle" />
-      <div className="modal">
+      <div className={`${modal}`}>
         <div className="relative modal-box">
           <label htmlFor="my-modal-g" className="absolute btn btn-sm btn-circle right-2 top-2">✕</label>
           <h3 className="text-lg font-bold">Ready?</h3>
