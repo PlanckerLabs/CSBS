@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useContract, useContractWrite, useChainId, useAccount } from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
 import CommunitySBTABI from '../../abi/CommunitySBT.json';
-import { useSbtIPFS } from '../../hooks/hooks';
+import { sbtIPFS } from '../../hooks/hooks';
 
 //const myContract = process.env.CONTRACT_ADDR;
 
@@ -10,30 +10,30 @@ const Sendsbt = (props) => {
   let cName = process.env.REACT_APP_COMMU_NAME;
   let cDescription = process.env.REACT_APP_COMMU_DISC;
   const myCanvas = useRef();
-  const [modal, setModal] = useState('modal')
+  const closeModal = useRef();
   const [MssageData, setMssageData] = useState('')
   const chainId = useChainId();
   const Account = useAccount();
 
-  // rory合约: 0x3CA7dCA365D135e51210EFFE70b158cCd82d3deF
-  const { contract } = useContract(process.env.REACT_APP_JHF_CONTRACT_ADDR, CommunitySBTABI);
-  console.log("contract: ", process.env.REACT_APP_JHF_CONTRACT_ADDR)
-  // const { contract } = useContract("0xe3ee6F3AF21f7010bfE2f72680a9d36cFa871Ad6", CommunitySBTABI);
+  const { contract } = useContract(process.env.REACT_APP_RORY_CONTRACT_ADDR, CommunitySBTABI);
+  console.log("contract: ", process.env.REACT_APP_RORY_CONTRACT_ADDR)
+
   const {
     mutateAsync: sedsbt,
   } = useContractWrite(contract, "issueBatchSBTWithEvent");
 
-
-
   const CreateImageBob = async (item) => {
-    let base64path = await addImageProcess(props.img, item)
-    return base64path
+    let base64path;
+    await addImageProcess(props.img, item).then(
+      (path) => {
+        base64path = path;
+      }
+    );
+    return base64path;
   }
 
   const SBTexist = async (address, tokenId) => {
     try {
-      //console.log(ethers.utils)
-      //console.log('aa', ethers.utils.solidityKeccak256(['address', 'uint256'], [address, tokenId]))
       const exist = await contract.call("addressAwardedMap", ethers.utils.solidityKeccak256(['address', 'uint256'], [address, tokenId]))
       return exist;
     } catch (error) {
@@ -57,7 +57,7 @@ const Sendsbt = (props) => {
 
   }
   function addImageProcess(src, item) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const context = myCanvas.current.getContext("2d");
       let img = new Image()
       img.onload = () => {
@@ -69,10 +69,6 @@ const Sendsbt = (props) => {
         } else {
           context.fillStyle = '#FFFFFF';
         }
-        context.font = "700 200px Inter";
-        context.textAlign = "center";
-        let _nickName = item.nickName.charAt(0).toUpperCase() + item.nickName.slice(1)
-        context.fillText(_nickName, 1920, 3520);
         context.font = "600 150px Inter";
         context.textAlign = "center";
         let _roleName = process.env.REACT_APP_COMMU_ACT_NAME + item.roleName + process.env.REACT_APP_COMMU_ACT_TAIL
@@ -86,8 +82,9 @@ const Sendsbt = (props) => {
   const SendSBT = async () => {
     let address = [];
     let metadata = [];
+
     try {
-      if (chainId === 80001) {
+      if (checkChainId()) {
         let singer = await checkSigner()
         if (singer) {
           setMssageData('Start Send ...')
@@ -96,13 +93,13 @@ const Sendsbt = (props) => {
             const list = props.data[index];
             let exists = await SBTexist(list.walletAddress, 1);
             setMssageData(`IPFS UPLOAD .... ${list.walletAddress}`)
+
             if (!exists) {
               console.log('in')
               let imageData = await CreateImageBob(list)
-              let blob = dataURItoBlob(imageData)
+              let blob = await (await fetch(imageData)).blob()
               let file = new File([blob], "image.png", { type: 'image/png' });
-              // eslint-disable-next-line react-hooks/rules-of-hooks
-              let url = await useSbtIPFS(cName, cDescription, file, list.nickName, list.roleName);
+              let url = await sbtIPFS(cName, cDescription, file, list.roleName);
               metadata.push(url)
               address.push(list.walletAddress)
             }
@@ -114,13 +111,17 @@ const Sendsbt = (props) => {
             if (Sentresult.receipt.status === 1) {
               setMssageData('Success...')
               console.log('上傳完畢')
+              setTimeout(() => {
+                closeModal.current.click();
+              }, 10000);
             } else {
               setMssageData('error....')
             }
           } else {
             setMssageData('Over...')
-            setModal('modal modal-toggle')
-
+            setTimeout(() => {
+              closeModal.current.click();
+            }, 10000);
           }
 
         } else {
@@ -136,21 +137,26 @@ const Sendsbt = (props) => {
     }
 
   }
-  function dataURItoBlob(dataURI) {
-    // convert base64/URLEncoded data component to raw binary data held in a string
-    var byteString;
-    if (dataURI.split(',')[0].indexOf('base64') >= 0)
-      byteString = atob(dataURI.split(',')[1]);
-    else
-      byteString = unescape(dataURI.split(',')[1]);
-    // separate out the mime component
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-    // write the bytes of the string to a typed array
-    var ia = new Uint8Array(byteString.length);
-    for (var i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
+  function checkChainId() {
+    /*
+      Main Network
+        ETH:1,
+        BSC:56,
+        AVA:43114,
+        Fantom:250,
+        Polygon:137,
+        Arbitrum One:42161,
+        OP:10
+      TestNetWork
+        Goerli:5
+        BSC:97
+        Mumbai:80001
+    */
+    let chainIds = [1, 56, 43114, 250, 137, 42161, 10, 5, 97, 80001]
+    if (chainIds.indexOf(chainId) > -1) {
+      return true;
     }
-    return new Blob([ia], { type: mimeString });
+    return false;
   }
 
   useEffect(() => {
@@ -167,13 +173,14 @@ const Sendsbt = (props) => {
       <h2>  3. Batch drop SBT to Destination addresses</h2>
       <label htmlFor="my-modal-g" className="btn btn-active btn-primary">Drop</label>
       <input type="checkbox" id="my-modal-g" className="modal-toggle" />
-      <div className={`${modal}`}>
+
+      <div className="modal">
         <div className="relative modal-box">
-          <label htmlFor="my-modal-g" className="absolute btn btn-sm btn-circle right-2 top-2">✕</label>
+          <label ref={closeModal} htmlFor="my-modal-g" className="absolute btn btn-sm btn-circle right-2 top-2">✕</label>
           <h3 className="text-lg font-bold">Ready?</h3>
           <p className="py-4">Confirm and ～～Launch!</p>
           <h3>{MssageData}</h3>
-          <button onClick={SendSBT} className="btn btn-info">Confirm</button>
+          <label onClick={SendSBT} className="btn btn-info">Confirm</label>
           <canvas ref={myCanvas} width={3840} height={3840} style={{ display: 'none' }} />
         </div>
       </div>

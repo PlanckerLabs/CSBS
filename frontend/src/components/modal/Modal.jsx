@@ -15,10 +15,7 @@ const Modal = (props) => {
       } else {
         context.fillStyle = '#FFFFFF';
       }
-      context.font = "700 200px Inter";
-      context.textAlign = "center";
-      let _nickName = props.item.nickName.charAt(0).toUpperCase() + props.item.nickName.slice(1)
-      context.fillText(_nickName, 1920, 3520);
+
       context.font = "600 150px Inter";
       context.textAlign = "center";
       let _roleName = process.env.REACT_APP_COMMU_ACT_NAME + props.item.roleName + process.env.REACT_APP_COMMU_ACT_TAIL
