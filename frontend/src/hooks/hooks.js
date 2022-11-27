@@ -95,7 +95,7 @@ const useMergeSvg = async (baseSVG, markedName, svgName) => {
 + result_url: 产出结果网址
 + self_jifen：评估自己的工作量
 */
-const useSbtIPFS = async (cName, cDescription, imageData, nickName, roleName) => {
+const sbtIPFS = async (cName, cDescription, imageData, roleName) => {
   /*
     test communityAddress :0x1613544204458181CE82240CD0ab9C114B3B899d
     cName: 'Plancker'
@@ -108,10 +108,6 @@ const useSbtIPFS = async (cName, cDescription, imageData, nickName, roleName) =>
       {
         "trait_type": "eventName",
         "value": process.env.REACT_APP_EVT_NAME
-      },
-      {
-        "trait_type": "nickName",
-        "value": nickName.charAt(0).toUpperCase() + nickName.slice(1)
       },
       {
         "trait_type": "roleName",
@@ -140,4 +136,4 @@ const useSbtIPFS = async (cName, cDescription, imageData, nickName, roleName) =>
   return url;
 };
 
-export { useSave2IPFS, useMergeSvg, useSbtIPFS };
+export { useSave2IPFS, useMergeSvg, sbtIPFS };
