@@ -4,7 +4,6 @@ import { ethers } from 'ethers';
 import CommunitySBTABI from '../../abi/CommunitySBT.json';
 import { sbtIPFS } from '../../hooks/hooks';
 
-//const myContract = process.env.CONTRACT_ADDR;
 
 const Sendsbt = (props) => {
   let cName = process.env.REACT_APP_COMMU_NAME;
@@ -15,7 +14,7 @@ const Sendsbt = (props) => {
   const chainId = useChainId();
   const Account = useAccount();
 
-  const { contract } = useContract(process.env.REACT_APP_RORY_CONTRACT_ADDR, CommunitySBTABI);
+  const { contract } = useContract(process.env.REACT_APP_PRODUCT_POLYGON_CONTRACT_ADDR, CommunitySBTABI);
   console.log("contract: ", process.env.REACT_APP_RORY_CONTRACT_ADDR)
 
   const {
