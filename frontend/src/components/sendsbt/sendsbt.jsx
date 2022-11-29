@@ -4,8 +4,7 @@ import { ethers } from 'ethers';
 import CommunitySBTABI from '../../abi/CommunitySBT.json';
 import { sbtIPFS } from '../../hooks/hooks';
 
-//const myContract = process.env.CONTRACT_ADDR;
-
+const EVENT_ID = process.env.REACT_APP_EVENT_ID;
 const Sendsbt = (props) => {
   let cName = process.env.REACT_APP_COMMU_NAME;
   let cDescription = process.env.REACT_APP_COMMU_DISC;
@@ -15,8 +14,8 @@ const Sendsbt = (props) => {
   const chainId = useChainId();
   const Account = useAccount();
 
-  const { contract } = useContract(process.env.REACT_APP_RORY_CONTRACT_ADDR, CommunitySBTABI);
-  console.log("contract: ", process.env.REACT_APP_RORY_CONTRACT_ADDR)
+  const { contract } = useContract(process.env.REACT_APP_PRODUCT_POLYGON_CONTRACT_ADDR, CommunitySBTABI);
+  console.log("contract: ", process.env.REACT_APP_PRODUCT_POLYGON_CONTRACT_ADDR)
 
   const {
     mutateAsync: sedsbt,
@@ -43,8 +42,10 @@ const Sendsbt = (props) => {
   }
   const checkSigner = async () => {
     try {
-      const result = await contract.call("communityEventMap", 1)
-      //console.log(Account, result.communitySigner)
+      const result = await contract.call("communityEventMap", EVENT_ID);
+      console.log("my addr:",Account[0].data.address);
+      console.log("result.communitySigner:",result.communitySigner);
+      console.log(Account, result.communitySigner)
       if (Account[0].data.address === result.communitySigner) {
         return 1;
       } else {
@@ -106,7 +107,7 @@ const Sendsbt = (props) => {
           }
           setMssageData(`Send SBT...`);
           if (metadata.length > 0) {
-            let Sentresult = await sedsbt([1, address, metadata]);
+            let Sentresult = await sedsbt([EVENT_ID, address, metadata]);
             console.log('rrrr', Sentresult)
             if (Sentresult.receipt.status === 1) {
               setMssageData('Success...')
