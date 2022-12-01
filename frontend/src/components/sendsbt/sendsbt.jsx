@@ -15,7 +15,6 @@ const Sendsbt = (props) => {
   const Account = useAccount();
 
   const { contract } = useContract(process.env.REACT_APP_PRODUCT_POLYGON_CONTRACT_ADDR, CommunitySBTABI);
-  console.log("contract: ", process.env.REACT_APP_PRODUCT_POLYGON_CONTRACT_ADDR)
 
   const {
     mutateAsync: sedsbt,
@@ -43,9 +42,6 @@ const Sendsbt = (props) => {
   const checkSigner = async () => {
     try {
       const result = await contract.call("communityEventMap", EVENT_ID);
-      console.log("my addr:",Account[0].data.address);
-      console.log("result.communitySigner:",result.communitySigner);
-      console.log(Account, result.communitySigner)
       if (Account[0].data.address === result.communitySigner) {
         return 1;
       } else {
