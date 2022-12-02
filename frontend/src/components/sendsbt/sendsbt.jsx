@@ -126,7 +126,7 @@ const Sendsbt = (props) => {
 
         }
       } else {
-        setMssageData('Switch Mumbai NetWork!!')
+        setMssageData('Pls check the Chain NetWork!!')
       }
     } catch (error) {
       setMssageData('error....')
